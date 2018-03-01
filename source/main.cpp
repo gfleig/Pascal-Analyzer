@@ -115,12 +115,7 @@ void delimitador(Token& token, ifstream& program, char& character)
 int main()
 {   
     ifstream program;
-    program.open("teste1");
-    
-    //int charsRead = 0;    
-
-    //string token;
-    //string currentTokenType;
+    program.open("teste1");    
 
     vector<Token> tokenList;
 
@@ -150,7 +145,7 @@ int main()
         {
             identificador(currentToken, program, character);
         }
-        else if(character == 59 || //
+        else if(character == 59 || //                       //primeiro char é um delimitador
                 character == 46 || //
                 character == 58 || //
                 character == 40 || //
@@ -158,14 +153,12 @@ int main()
                 character == 44 )  //
         {
             delimitador(currentToken, program, character);
-        }        
+        }
 
-        
-
-        tokenList.push_back(currentToken);
+        tokenList.push_back(currentToken);                  //adiciona token no fim do array de tokens
     }
 
-    for(unsigned int i = 0; i < tokenList.size(); ++i)
+    for(unsigned int i = 0; i < tokenList.size(); ++i)      //imprime tokens, seus tipos
     {
         cout << tokenList[i].line << "\t"<< tokenList[i].symbol << "\t\t" << tokenList[i].TokenType << endl;
     }
