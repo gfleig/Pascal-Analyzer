@@ -134,10 +134,10 @@ int main()
         else if(character == '\n')
         {
             ++currentLine;
+            character = program.get();
         }
         else if(character >= 48 && character <= 57)         //primeiro char é um numero
-        {
-            //currentTokenType = "inteiro";
+        {            
             inteiro(currentToken, program, character);            
         }
         else if(    (character >= 65 && character <= 90 )   //primeiro char é uma letra
