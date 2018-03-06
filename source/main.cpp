@@ -6,6 +6,7 @@
 using namespace std;
 
 int currentLine = 1;
+int errorID = 0;
 char character;                         //caractere que está sendo lido no momento, deve ser global para ser guardado na mudança de tipo de token
 
 struct Token
@@ -27,24 +28,15 @@ struct Token
 
 void real(Token& token, ifstream& program, char& character)
 {
-    token.TokenType = "real";
+    token.TokenType = "Real";
     token.symbol.push_back(character);
 
     character = program.get();
 
-    while(character == '\n' || character == '\t')
-    {
-        if(character == '\n')
-        {
-            ++currentLine;
-        }
-        character = program.get();        
-    }  
-
     if(character >= 48 && character <= 57)
     {
         real(token, program, character);     //próximo "estado do autônomo". se não houver próximo estado a partir do atual(no caso números inteiros), volta para o começo do loop no main
-    }    
+    }
     else
     {
         return;     //volta para o loop do main
@@ -53,19 +45,10 @@ void real(Token& token, ifstream& program, char& character)
 
 void inteiro(Token& token, ifstream& program, char& character)
 {
-    token.TokenType = "inteiro";
+    token.TokenType = "Inteiro";
     token.symbol.push_back(character);
 
     character = program.get();
-
-    while(character == '\n' || character == '\t')
-    {
-        if(character == '\n')
-        {
-            ++currentLine;
-        }
-        character = program.get();        
-    }  
 
     if(character >= 48 && character <= 57)
     {
@@ -83,21 +66,12 @@ void inteiro(Token& token, ifstream& program, char& character)
 
 void identificador(Token& token, ifstream& program, char& character)
 {
-    token.TokenType = "identificador";
+    token.TokenType = "Identificador";
     token.symbol.push_back(character);
 
     character = program.get();
 
-    while(character == '\n' || character == '\t')
-    {
-        if(character == '\n')
-        {
-            ++currentLine;
-        }
-        character = program.get();        
-    }  
-
-    if(     (character >= 48 && character <= 57 ) 
+    if(     (character >= 48 && character <= 57 )
         ||  (character >= 65 && character <= 90 )
         ||  (character >= 97 && character <= 122)
         ||  (character == 95))
@@ -106,43 +80,51 @@ void identificador(Token& token, ifstream& program, char& character)
     }
     else
     {
+      if(     (token.symbol == "program" )
+          ||  (token.symbol == "var")
+          ||  (token.symbol == "integer")
+          ||  (token.symbol == "real")
+          ||  (token.symbol == "boolean")
+          ||  (token.symbol == "procedure")
+          ||  (token.symbol == "begin")
+          ||  (token.symbol == "end")
+          ||  (token.symbol == "if")
+          ||  (token.symbol == "then")
+          ||  (token.symbol == "else")
+          ||  (token.symbol == "while")
+          ||  (token.symbol == "do")
+          ||  (token.symbol == "not"))
+      {
+        token.TokenType = "Palavra Chave";
+      }
+      else if(token.symbol == "or")
+      {
+        token.TokenType = "Op. Aditivo";
+      }
+      else if(token.symbol == "and")
+      {
+        token.TokenType = "Op. Multiplicativo";
+      }
         return;
     }
 }
 
 void atribuicao(Token& token, ifstream& program, char& character)
 {
-    token.TokenType = "atribuição";
+    token.TokenType = "Atribuição";
     token.symbol.push_back(character);
 
     character = program.get();
 
-    while(character == '\n' || character == '\t')
-    {
-        if(character == '\n')
-        {
-            ++currentLine;
-        }
-        character = program.get();        
-    }  
-    return;    
+    return;
 }
 
 void delimitador(Token& token, ifstream& program, char& character)
 {
-    token.TokenType = "delimitador";
+    token.TokenType = "Delimitador";
     token.symbol.push_back(character);
 
     character = program.get();
-
-    while(character == '\n' || character == '\t')
-    {
-        if(character == '\n')
-        {
-            ++currentLine;
-        }
-        character = program.get();        
-    }  
 
     if(token.symbol[0] == ':' && character == 61)
     {
@@ -156,60 +138,35 @@ void delimitador(Token& token, ifstream& program, char& character)
 
 void aditivo(Token& token, ifstream& program, char& character)
 {
-    token.TokenType = "op. aditivo";
+    token.TokenType = "Op. Aditivo";
     token.symbol.push_back(character);
 
     character = program.get();
 
-    while(character == '\n' || character == '\t')
-    {
-        if(character == '\n')
-        {
-            ++currentLine;
-        }
-        character = program.get();        
-    }
     return;
 }
 
 void multiplicativo(Token& token, ifstream& program, char& character)
 {
-    token.TokenType = "op. multiplicativo";
+    token.TokenType = "Op. Multiplicativo";
     token.symbol.push_back(character);
 
     character = program.get();
 
-    while(character == '\n' || character == '\t')
-    {
-        if(character == '\n')
-        {
-            ++currentLine;
-        }
-        character = program.get();        
-    }
     return;
 }
 
 void relacional(Token& token, ifstream& program, char& character)
 {
-    token.TokenType = "op. relacional";
+    token.TokenType = "Op. Relacional";
     token.symbol.push_back(character);
 
     char firstCharacter = character;
 
     character = program.get();
 
-    while(character == '\n' || character == '\t')
-    {
-        if(character == '\n')
-        {
-            ++currentLine;
-        }
-        character = program.get();        
-    }      
-
     if(firstCharacter == '=')
-    {        
+    {
         return;
     }
     else if(character == '=')
@@ -223,13 +180,35 @@ void relacional(Token& token, ifstream& program, char& character)
         token.symbol.push_back(character);
         character = program.get();
         return;
-    }    
+    }
+}
+
+void comentario(Token& token, ifstream& program, char& character)
+{
+  while(character != '}')
+  {
+    character = program.get();
+
+    if(character == '\n')
+    {
+        ++currentLine;
+        character = program.get();
+        continue;
+    }
+    else if(program.eof())
+    {
+      errorID = 2;
+      break;
+    }
+  }
+  character = program.get();
+  return;
 }
 
 int main()
-{   
+{
     ifstream program;
-    program.open("teste1");    
+    program.open("teste1");
 
     vector<Token> tokenList;
 
@@ -238,8 +217,8 @@ int main()
     while(!program.eof())               //enquanto ainda tiver programa a ser lido
     {
         Token currentToken;
-        currentToken.line = currentLine;        
-        
+        currentToken.line = currentLine;
+
         if(character == 32 || character == '\t')             //ignora espaços
         {
             character = program.get();
@@ -252,8 +231,8 @@ int main()
             continue;
         }
         else if(character >= 48 && character <= 57)         //primeiro char é um numero
-        {            
-            inteiro(currentToken, program, character);            
+        {
+            inteiro(currentToken, program, character);
         }
         else if(    (character >= 65 && character <= 90 )   //primeiro char é uma letra
                 ||  (character >= 97 && character <= 122))
@@ -270,23 +249,46 @@ int main()
             delimitador(currentToken, program, character);
         }
         else if(character == '+' || character == '-')         //operadores aditivos
-        {            
-            aditivo(currentToken, program, character);            
+        {
+            aditivo(currentToken, program, character);
         }
         else if(character == '*' || character == '/')         //operadores multiplicativos
-        {            
-            multiplicativo(currentToken, program, character);            
+        {
+            multiplicativo(currentToken, program, character);
         }
         else if (character == '>' || character == '<'|| character == '=')        //operadores relacionais
         {
             relacional(currentToken, program, character);
         }
+        else if (character == '{')
+        {
+            comentario(currentToken, program, character);
+            continue;
+        }
+        else
+        {
+            errorID = 1;
+            break;
+        }
         tokenList.push_back(currentToken);                  //adiciona token no fim do array de tokens
     }
 
-    for(unsigned int i = 0; i < tokenList.size(); ++i)      //imprime tokens, seus tipos
+    if (errorID == 0)
     {
-        cout << tokenList[i].line << "\t"<< tokenList[i].symbol << "\t\t" << tokenList[i].TokenType << endl;
+        for(unsigned int i = 0; i < tokenList.size(); ++i)      //imprime tokens, seus tipos
+        {
+            cout << tokenList[i].line << "\t"<< tokenList[i].symbol << "\t\t" << tokenList[i].TokenType << endl;
+        }
+    }
+    else if (errorID == 1)
+    {
+        cout << "ERROR: Unkown Symbol on line " << currentLine << endl;
+        return 1;
+    }
+    else if (errorID == 2)
+    {
+        cout << "ERROR: Unclosed Comment" << endl;
+        return 1;
     }
 
     return 0;
