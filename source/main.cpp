@@ -150,12 +150,14 @@ int main()
         }
         else if(character >= 48 && character <= 57)         //primeiro char é um numero
         {            
-            inteiro(currentToken, program, character);            
+            inteiro(currentToken, program, character);
+            tokenList.push_back(currentToken);                  //adiciona token no fim do array de tokens            
         }
         else if(    (character >= 65 && character <= 90 )   //primeiro char é uma letra
                 ||  (character >= 97 && character <= 122))
         {
             identificador(currentToken, program, character);
+            tokenList.push_back(currentToken);                  //adiciona token no fim do array de tokens
         }
         else if(character == 59 || //                       //primeiro char é um delimitador
                 character == 46 || //
@@ -165,9 +167,8 @@ int main()
                 character == 44 )  //
         {
             delimitador(currentToken, program, character);
-        }
-
-        tokenList.push_back(currentToken);                  //adiciona token no fim do array de tokens
+            tokenList.push_back(currentToken);                  //adiciona token no fim do array de tokens
+        }        
     }
 
     for(unsigned int i = 0; i < tokenList.size(); ++i)      //imprime tokens, seus tipos
