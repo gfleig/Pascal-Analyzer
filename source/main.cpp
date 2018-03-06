@@ -138,7 +138,7 @@ int main()
         Token currentToken;
         currentToken.line = currentLine;        
         
-        if(character == 32 || character = '\t')             //ignora espaços
+        if(character == 32 || character == '\t')             //ignora espaços
         {
             character = program.get();
             continue;
