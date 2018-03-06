@@ -144,7 +144,7 @@ void delimitador(Token& token, ifstream& program, char& character)
         character = program.get();        
     }  
 
-    if(character == 61)
+    if(token.symbol[0] == ':' && character == 61)
     {
         atribuicao(token, program, character);
     }
@@ -152,6 +152,78 @@ void delimitador(Token& token, ifstream& program, char& character)
     {
         return;
     }
+}
+
+void aditivo(Token& token, ifstream& program, char& character)
+{
+    token.TokenType = "op. aditivo";
+    token.symbol.push_back(character);
+
+    character = program.get();
+
+    while(character == '\n' || character == '\t')
+    {
+        if(character == '\n')
+        {
+            ++currentLine;
+        }
+        character = program.get();        
+    }
+    return;
+}
+
+void multiplicativo(Token& token, ifstream& program, char& character)
+{
+    token.TokenType = "op. multiplicativo";
+    token.symbol.push_back(character);
+
+    character = program.get();
+
+    while(character == '\n' || character == '\t')
+    {
+        if(character == '\n')
+        {
+            ++currentLine;
+        }
+        character = program.get();        
+    }
+    return;
+}
+
+void relacional(Token& token, ifstream& program, char& character)
+{
+    token.TokenType = "op. relacional";
+    token.symbol.push_back(character);
+
+    char firstCharacter = character;
+
+    character = program.get();
+
+    while(character == '\n' || character == '\t')
+    {
+        if(character == '\n')
+        {
+            ++currentLine;
+        }
+        character = program.get();        
+    }      
+
+    if(firstCharacter == '=')
+    {        
+        return;
+    }
+    else if(character == '=')
+    {
+        token.symbol.push_back(character);
+        character = program.get();
+        return;
+    }
+    else if (character == '>' && firstCharacter == '<')
+    {
+        token.symbol.push_back(character);
+        character = program.get();
+        return;
+    }    
 }
 
 int main()
@@ -197,7 +269,18 @@ int main()
         {
             delimitador(currentToken, program, character);
         }
-
+        else if(character == '+' || character == '-')         //operadores aditivos
+        {            
+            aditivo(currentToken, program, character);            
+        }
+        else if(character == '*' || character == '/')         //operadores multiplicativos
+        {            
+            multiplicativo(currentToken, program, character);            
+        }
+        else if (character == '>' || character == '<'|| character == '=')        //operadores relacionais
+        {
+            relacional(currentToken, program, character);
+        }
         tokenList.push_back(currentToken);                  //adiciona token no fim do array de tokens
     }
 
