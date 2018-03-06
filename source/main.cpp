@@ -25,6 +25,32 @@ struct Token
     _:      95      >>>>>>>>>>NAO SAI DIREITO<<<<<<<
 */
 
+void real(Token& token, ifstream& program, char& character)
+{
+    token.TokenType = "real";
+    token.symbol.push_back(character);
+
+    character = program.get();
+
+    while(character == '\n' || character == '\t')
+    {
+        if(character == '\n')
+        {
+            ++currentLine;
+        }
+        character = program.get();        
+    }  
+
+    if(character >= 48 && character <= 57)
+    {
+        real(token, program, character);     //próximo "estado do autônomo". se não houver próximo estado a partir do atual(no caso números inteiros), volta para o começo do loop no main
+    }    
+    else
+    {
+        return;     //volta para o loop do main
+    }
+}
+
 void inteiro(Token& token, ifstream& program, char& character)
 {
     token.TokenType = "inteiro";
@@ -44,6 +70,10 @@ void inteiro(Token& token, ifstream& program, char& character)
     if(character >= 48 && character <= 57)
     {
         inteiro(token, program, character);     //próximo "estado do autônomo". se não houver próximo estado a partir do atual(no caso números inteiros), volta para o começo do loop no main
+    }
+    else if(character == '.')
+    {
+        real(token, program, character);
     }
     else
     {
