@@ -32,11 +32,14 @@ void inteiro(Token& token, ifstream& program, char& character)
 
     character = program.get();
 
-    while(character == '\n')        //se houver uma nova linha, ignora ela
+    while(character == '\n' || character == '\t')
     {
-        character = program.get();
-        ++currentLine;
-    }
+        if(character == '\n')
+        {
+            ++currentLine;
+        }
+        character = program.get();        
+    }  
 
     if(character >= 48 && character <= 57)
     {
@@ -55,11 +58,14 @@ void identificador(Token& token, ifstream& program, char& character)
 
     character = program.get();
 
-    while(character == '\n')
+    while(character == '\n' || character == '\t')
     {
-        character = program.get();
-        ++currentLine;
-    }
+        if(character == '\n')
+        {
+            ++currentLine;
+        }
+        character = program.get();        
+    }  
 
     if(     (character >= 48 && character <= 57 ) 
         ||  (character >= 65 && character <= 90 )
@@ -81,11 +87,14 @@ void atribuicao(Token& token, ifstream& program, char& character)
 
     character = program.get();
 
-    while(character == '\n')
+    while(character == '\n' || character == '\t')
     {
-        character = program.get();
-        ++currentLine;
-    }    
+        if(character == '\n')
+        {
+            ++currentLine;
+        }
+        character = program.get();        
+    }  
     return;    
 }
 
@@ -96,11 +105,14 @@ void delimitador(Token& token, ifstream& program, char& character)
 
     character = program.get();
 
-    while(character == '\n')
+    while(character == '\n' || character == '\t')
     {
-        character = program.get();
-        ++currentLine;
-    }
+        if(character == '\n')
+        {
+            ++currentLine;
+        }
+        character = program.get();        
+    }  
 
     if(character == 61)
     {
@@ -126,7 +138,7 @@ int main()
         Token currentToken;
         currentToken.line = currentLine;        
         
-        if(character == 32)             //ignora espaços
+        if(character == 32 || character = '\t')             //ignora espaços
         {
             character = program.get();
             continue;
