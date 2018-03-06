@@ -208,7 +208,7 @@ void comentario(Token& token, ifstream& program, char& character)
 int main()
 {
     ifstream program;
-    program.open("teste1");
+    program.open("teste");
 
     vector<Token> tokenList;
 
