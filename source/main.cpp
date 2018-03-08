@@ -16,6 +16,8 @@ struct Token
     int line;
 };
 
+vector<Token> tokenList;
+
 /*
     Ranges dos caracteres em ASCII:
 
@@ -42,6 +44,129 @@ void real(Token& token, ifstream& program, char& character)
         return;     //volta para o loop do main
     }
 }
+
+void real1B(Token& token, ifstream& program, char& character)
+{
+  char eChar = character;
+  character = program.get();
+
+  if(character == '+' || character == '-')
+  {
+    token.symbol.push_back(eChar);
+    token.symbol.push_back(character);
+
+    character = program.get();
+
+    if(character >= 48 && character <= 57)
+    {
+      while(true)
+      {
+        if(character >= 48 && character <= 57)
+        {
+          token.symbol.push_back(character);
+          character = program.get();
+          continue;
+        }
+        else{
+          break;
+        }
+      }
+    }
+    else
+    {
+      //acessar último elemento da string Symbol
+      //token.symbol.at(token.symbol.back());
+      //remover último elementro da string symbol
+      //token.symbol.pop_back();
+
+      Token auxToken;
+      auxToken.TokenType = "Op. Aditivo";
+      auxToken.line = currentLine;
+      auxToken.symbol = token.symbol.at(0);
+      token.symbol.erase(0,1);
+
+      tokenList.push_back(auxToken);
+
+      Token aux2Token;
+      auxToken.TokenType = "Op. Aditivo";
+      auxToken.line = currentLine;
+      auxToken.symbol = token.symbol.at(token.symbol.back());
+      token.symbol.pop_back();
+
+      tokenList.push_back(aux2Token);
+
+      Token aux3Token;
+      auxToken.TokenType = "Identificador";
+      auxToken.line = currentLine;
+      auxToken.symbol = token.symbol.at(token.symbol.back());
+      token.symbol.pop_back();
+
+      tokenList.push_back(aux3Token);
+
+      token.TokenType = "Inteiro";
+
+    }
+  }
+  else
+  {
+    Token auxToken;
+    auxToken.TokenType = "Op. Aditivo";
+    auxToken.line = currentLine;
+    auxToken.symbol = token.symbol.at(0);
+    token.symbol.erase(0,1);
+
+    tokenList.push_back(auxToken);
+
+    token.TokenType = "Inteiro";
+
+    program.seekg(-2, ios_base::cur);
+
+  }
+}
+
+void real1A(Token& token, ifstream& program, char& character)
+{
+    token.TokenType = "Real 1";
+    token.symbol.push_back(character);
+
+    character = program.get();
+
+    if(character >= 48 && character <= 57)
+    {
+      real1A(token, program, character);
+    }
+
+    else if(character == 'e')
+    {
+      real1B(token, program, character);
+    }
+    else if(character == '.')
+    {
+      Token auxToken;
+      auxToken.TokenType = "Op. Aditivo";
+      auxToken.line = currentLine;
+      auxToken.symbol = token.symbol.at(0);
+      token.symbol.erase(0,1);
+
+      tokenList.push_back(auxToken);
+
+      real(token, program, character);
+    }
+    else
+    {
+      Token auxToken;
+      auxToken.TokenType = "Op. Aditivo";
+      auxToken.line = currentLine;
+      auxToken.symbol = token.symbol.at(0);
+      token.symbol.erase(0,1);
+
+      tokenList.push_back(auxToken);
+
+      token.TokenType = "Inteiro";
+    }
+
+}
+
 
 void inteiro(Token& token, ifstream& program, char& character)
 {
@@ -143,6 +268,11 @@ void aditivo(Token& token, ifstream& program, char& character)
 
     character = program.get();
 
+    if (character >= 48 && character <= 57)
+    {
+      real1A(token, program, character);
+    }
+
     return;
 }
 
@@ -192,7 +322,6 @@ void comentario(Token& token, ifstream& program, char& character)
     if(character == '\n')
     {
         ++currentLine;
-        character = program.get();
         continue;
     }
     else if(program.eof())
@@ -209,8 +338,6 @@ int main()
 {
     ifstream program;
     program.open("teste");
-
-    vector<Token> tokenList;
 
     character = program.get();          //pega o primeiro caractere; os proximos vão ser pegos dentro das funções
 
