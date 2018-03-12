@@ -88,17 +88,17 @@ void real1B(Token& token, ifstream& program, char& character)
       tokenList.push_back(auxToken);
 
       Token aux2Token;
-      auxToken.TokenType = "Op. Aditivo";
-      auxToken.line = currentLine;
-      auxToken.symbol = token.symbol.at(token.symbol.back());
+      aux2Token.TokenType = "Op. Aditivo";
+      aux2Token.line = currentLine;
+      aux2Token.symbol = token.symbol.back();
       token.symbol.pop_back();
 
       tokenList.push_back(aux2Token);
 
       Token aux3Token;
-      auxToken.TokenType = "Identificador";
-      auxToken.line = currentLine;
-      auxToken.symbol = token.symbol.at(token.symbol.back());
+      aux3Token.TokenType = "Identificador";
+      aux3Token.line = currentLine;
+      aux3Token.symbol = token.symbol.back();
       token.symbol.pop_back();
 
       tokenList.push_back(aux3Token);
@@ -120,6 +120,8 @@ void real1B(Token& token, ifstream& program, char& character)
     token.TokenType = "Inteiro";
 
     program.seekg(-2, ios_base::cur);
+
+    character = program.get();
 
   }
 }
