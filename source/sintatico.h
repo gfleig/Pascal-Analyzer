@@ -76,11 +76,52 @@ int fator()
         currentToken.symbol == "false" ||
     )
     {
-        return 1;
+        getSymbol();
+
+        if (currentToken.symbol == "(")
+        {
+          if(lista_de_expressoes() == 1)
+          {
+              getSymbol();
+
+              if (currentToken.symbol == ")")
+              {
+                return 1;
+              }
+              else
+              {
+                erro();
+              }
+          }
+          else
+          {
+            erro();
+          }
+        }
+        else
+        {
+          return 1;
+        }
     }
     else if (currentToken.symbol == "not")
     {
-        return expressao();
+        return fator();
+    }
+    else if (currentToken.symbol == "(")
+    {
+        if (expressao() == 1)
+        {
+          getSymbol();
+
+          if (currenToken.symbol == ")")
+          {
+            return 1;
+          }
+          else
+          {
+            erro();
+          }
+        }
     }
     else
     {
