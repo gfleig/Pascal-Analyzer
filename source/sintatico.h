@@ -1,5 +1,10 @@
 Token currentToken;
 
+void erro()
+{
+  cout << "ERROR on line " << currentToken.currentLine << endl;
+}
+
 void getSymbol()
 {
     static int currentIndex = 0;
@@ -16,6 +21,10 @@ int opMultiplicativo()
     {
         return 1;
     }
+    else
+    {
+        erro();
+    }
 }
 
 int opAditivo()
@@ -24,6 +33,10 @@ int opAditivo()
     if(currentToken.TokenType == "Op. Aditivo")
     {
         return 1;
+    }
+    else
+    {
+        erro();
     }
 }
 
@@ -34,6 +47,10 @@ int opRelacional()
     {
         return 1;
     }
+    else
+    {
+        erro();
+    }
 }
 
 int sinal()
@@ -42,6 +59,10 @@ int sinal()
     if(currentToken.TokenType == "Op. Relacional")
     {
         return 1;
+    }
+    else
+    {
+        erro();
     }
 }
 
@@ -61,5 +82,8 @@ int fator()
     {
         return expressao();
     }
-    else if
+    else
+    {
+      erro();
+    }
 }
