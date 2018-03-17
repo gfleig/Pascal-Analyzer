@@ -1,4 +1,5 @@
 #include "lexico.h"
+#include "sintatico.h"
 
 int main()
 {
