@@ -1,8 +1,9 @@
 Token currentToken;
 
-void erro()
+int erro()
 {
   cout << "ERROR on line " << currentToken.currentLine << endl;
+  return 0;
 }
 
 void getSymbol()
@@ -23,7 +24,7 @@ int opMultiplicativo()
     }
     else
     {
-        erro();
+        return erro();
     }
 }
 
@@ -36,7 +37,7 @@ int opAditivo()
     }
     else
     {
-        erro();
+        return erro();
     }
 }
 
@@ -49,58 +50,62 @@ int opRelacional()
     }
     else
     {
-        erro();
+        return erro();
     }
 }
 
 int sinal()
 {
     getSymbol();
-    if(currentToken.TokenType == "Op. Relacional")
+    if( currentToken.symbol == "+"  || 
+        currentToken.symbol == "-")
     {
         return 1;
     }
     else
     {
-        erro();
+        return erro();
     }
 }
 
 int fator()
 {
     getSymbol();
-    if( currentToken.TokenType == "Identificador" ||
-        currentToken.TokenType == "Inteiro" ||
+    if( currentToken.TokenType == "Inteiro" ||
         currentToken.TokenType == "Real" ||
         currentToken.symbol == "true" ||
         currentToken.symbol == "false" ||
     )
     {
+        return 1;
+    }
+    else if (currentToken.TokenType == "Identificador")
+    {
         getSymbol();
 
         if (currentToken.symbol == "(")
         {
-          if(lista_de_expressoes() == 1)
-          {
-              getSymbol();
+            if(listaDeExpressoes())
+            {
+                getSymbol();
 
-              if (currentToken.symbol == ")")
-              {
+                if (currentToken.symbol == ")")
+                {
                 return 1;
-              }
-              else
-              {
+                }
+                else
+                {   
+                    erro();
+                }
+            }
+            else
+            {
                 erro();
-              }
-          }
-          else
-          {
-            erro();
-          }
+            }
         }
         else
         {
-          return 1;
+            return 1;
         }
     }
     else if (currentToken.symbol == "not")
@@ -109,22 +114,199 @@ int fator()
     }
     else if (currentToken.symbol == "(")
     {
-        if (expressao() == 1)
+        if (expressao())
         {
-          getSymbol();
+            getSymbol();
 
-          if (currenToken.symbol == ")")
-          {
-            return 1;
-          }
-          else
-          {
-            erro();
-          }
+            if (currenToken.symbol == ")")
+            {
+                return 1;
+            }
+            else
+            {
+                erro();
+            }
         }
     }
     else
     {
-      erro();
+        erro();
+    }
+}
+
+int termo_()
+{
+
+}
+
+int termo()
+{
+
+}
+
+int expressaoSimples_()
+{
+    
+}
+
+int expressaoSimples()
+{
+
+}
+
+int expressao()
+{
+
+}
+
+int listaDeExpressoes_()
+{
+
+}
+
+int listaDeExpressoes()
+{
+
+}
+
+int ativacaoDeProcedimento()
+{
+
+}
+
+int variavel()
+{
+    
+}
+
+int parteElse()
+{
+
+}
+
+int comando()
+{
+
+}
+
+int listaDeComandos_()
+{
+
+}
+
+int listaDeComandos()
+{
+
+}
+
+int comandosOpcionais()
+{
+
+}
+
+int comandoComposto()
+{
+
+}
+
+int listaDeParametros_()
+{
+
+}
+
+int listaDeParametros()
+{
+
+}
+
+int argumentos()
+{
+
+}
+
+int declaracaoDeSubprograma()
+{
+
+}
+
+int declaracaoDeSubprogramas_()
+{
+
+}
+
+int declaracaoDeSubprogramas()
+{
+
+}
+
+int tipo()
+{
+
+}
+
+int listaDeIdentificadores_()
+{
+
+}
+
+int listaDeIdentificadores()
+{
+    
+}
+
+int listaDeclaracaoVariaveis_()
+{
+
+}
+
+int listaDeclaracaoVariaveis()
+{
+    
+}
+
+int declaracoesVariaveis()
+{
+
+}
+
+int programa()
+{
+    getSymbol();
+    if( currentToken.symbol == "program")
+    {
+        getSymbol();
+        if(currentToken.TokenType == "Identificador")
+        {
+            getSymbol();
+            if(currentToken.symbol == ";")
+            {
+                declaracoesVariaveis();
+                declaracaoDeSubprogramas();
+                comandoComposto();
+
+                getSymbol();
+
+                if(currentToken.symbol == ".")
+                {
+                    return 1;
+                }
+                else
+                {
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }            
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else 
+    {
+        return erro();
     }
 }
