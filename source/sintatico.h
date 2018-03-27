@@ -1,4 +1,5 @@
 Token currentToken;
+int currentIndex = 0;
 
 int erro()
 {
@@ -8,8 +9,6 @@ int erro()
 
 void getSymbol()
 {
-    static int currentIndex = 0;
-
     currentToken = tokenList[currentIndex];
 
     ++currentIndex;
@@ -140,15 +139,29 @@ int fator()
 
 int termo_()
 {
-    if(opMultiplicativo() && fator() && termo_())
+    if(opMultiplicativo())
     {
-        return 1;
+        if(fator())
+        {            
+            if(termo_())
+            {
+                return 1;
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
     }
     else
     {
-        return 0;
-    }
-    return 1;
+        --currentIndex;
+        return 1;
+    }    
 }
 
 int termo()
