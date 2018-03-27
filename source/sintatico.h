@@ -95,12 +95,12 @@ int fator()
                 }
                 else
                 {   
-                    erro();
+                    return erro();
                 }
             }
             else
             {
-                erro();
+                return erro();
             }
         }
         else
@@ -118,30 +118,35 @@ int fator()
         {
             getSymbol();
 
-            if (currenToken.symbol == ")")
+            if (currentToken.symbol == ")")
             {
                 return 1;
             }
             else
             {
-                erro();
+                return erro();
             }
+        }
+        else
+        {
+            return erro();
         }
     }
     else
     {
-        erro();
+        return erro();
     }
 }
 
 int termo_()
 {
+    return (fator() && 
 
 }
 
 int termo()
 {
-
+    return (fator() && termo_());
 }
 
 int expressaoSimples_()
