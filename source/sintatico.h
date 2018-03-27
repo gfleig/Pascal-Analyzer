@@ -140,8 +140,15 @@ int fator()
 
 int termo_()
 {
-    return (fator() && 
-
+    if(opMultiplicativo() && fator() && termo_())
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+    return 1;
 }
 
 int termo()
