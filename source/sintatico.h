@@ -288,17 +288,83 @@ int parteElse()
 
 int comando()
 {
-
+    if(variavel())
+    {
+        getSymbol();
+        if(currentToken.TokenType == "Atribuição")
+        {
+            return expressao();
+        }
+    }
+    else if (ativacaoDeProcedimento()) {
+        return 1;
+    }
+    else if (comandoComposto())
+    {
+        return 1;
+    }
+    else
+    {
+      getSymbol();
+      if(currentToken.symbol == "if")
+      {
+          if(expressao())
+          {
+              getSymbol();
+              if(currentToken.symbol == "then")
+              {
+                  return comando() && parteElse();
+              }
+              else
+              {
+                  return erro();
+              }
+          }
+          else if (currentToken).symbol == "while")
+          {
+              if(expressao())
+              {
+                  getSymbol();
+                  if(currentToken.symbol == "do")
+                  {
+                      return comando();
+                  }
+                  else
+                  {
+                      return erro();
+                  }
+              }
+              else
+              {
+                  return erro();
+              }
+          }
+          else
+          {
+              return erro();
+          }
+      }
+        return erro();
+    }
 }
 
 int listaDeComandos_()
 {
-
+    getSymbol();
+    if(currentToken.symbol == ";")
+    {
+        return comando() && listaDeComandos_();
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
 }
 
 int listaDeComandos()
 {
-
+    return comando() && listaDeComandos_();
 }
 
 int comandosOpcionais()
