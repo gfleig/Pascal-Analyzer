@@ -42,9 +42,12 @@ int erro()
 
 void getSymbol()
 {
-    currentToken = tokenList[currentIndex];
+    if(currentIndex != tokenList.size())
+    {
+      currentToken = tokenList[currentIndex];
 
-    ++currentIndex;
+      ++currentIndex;
+    }
 }
 
 int opMultiplicativo()
@@ -813,6 +816,9 @@ int declaracoesVariaveis()
 
 int programa()
 {
+
+    cout << "Simbolos na tabela: " << tokenList.size() << endl;
+
     getSymbol();
     if( currentToken.symbol == "program")
     {
@@ -837,7 +843,7 @@ int programa()
                             }
                             else
                             {
-                                currentIndex -= 2;
+                                --currentIndex;
                                 getSymbol();
                                 cout << "ERROR on line " << currentToken.line << endl;
                                 return erro();
