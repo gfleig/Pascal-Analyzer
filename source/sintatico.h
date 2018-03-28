@@ -57,6 +57,7 @@ int opMultiplicativo()
     }
     else
     {
+        --currentIndex;
         return erro();
     }
 }
@@ -70,6 +71,7 @@ int opAditivo()
     }
     else
     {
+        --currentIndex;
         return erro();
     }
 }
@@ -124,10 +126,11 @@ int fator()
 
                 if (currentToken.symbol == ")")
                 {
-                return 1;
+                    return 1;
                 }
                 else
                 {
+                    --currentIndex;
                     return erro();
                 }
             }
@@ -138,6 +141,7 @@ int fator()
         }
         else
         {
+            --currentIndex;
             return 1;
         }
     }
@@ -167,6 +171,7 @@ int fator()
     }
     else
     {
+        --currentIndex;
         return erro();
     }
 }
@@ -193,7 +198,6 @@ int termo_()
     }
     else
     {
-        --currentIndex;
         return 1;
     }
 }
@@ -225,7 +229,6 @@ int expressaoSimples_()
     }
     else
     {
-        --currentIndex;
         return 1;
     }
 }
@@ -248,7 +251,7 @@ int expressaoSimples()
 
 int expressao()
 {
-    if(expressao())
+    if(expressaoSimples())
     {
         return 1;
     }
@@ -366,6 +369,7 @@ int comando()
         }
         else
         {
+            --currentIndex;
             return erro();
         }
     }
@@ -415,6 +419,7 @@ int comando()
             }
             else
             {
+                --currentIndex;
                 return erro();
             }
         }
@@ -452,7 +457,6 @@ int comandosOpcionais()
     }
     else
     {
-        --currentIndex;
         return 1;
     }
 }
@@ -481,6 +485,7 @@ int comandoComposto()
     }
     else
     {
+        --currentIndex;
         return erro();
     }
 }
@@ -615,6 +620,7 @@ int declaracaoDeSubprograma()
                 }
                 else
                 {
+                    --currentIndex;
                     return erro();
                 }
             }
@@ -625,11 +631,13 @@ int declaracaoDeSubprograma()
         }
         else
         {
+            --currentIndex;
             return erro();
         }
     }
     else
     {
+        --currentIndex;
         return erro();
     }
 }
