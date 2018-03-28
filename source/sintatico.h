@@ -364,8 +364,13 @@ int comando()
         {
             return expressao();
         }
+        else
+        {
+            return erro();
+        }
     }
-    else if (ativacaoDeProcedimento()) {
+    else if (ativacaoDeProcedimento())
+    {
         return 1;
     }
     else if (comandoComposto())
@@ -374,48 +379,51 @@ int comando()
     }
     else
     {
-      getSymbol();
-      if(currentToken.symbol == "if")
-      {
-          if(expressao())
-          {
-              getSymbol();
-              if(currentToken.symbol == "then")
-              {
-                  return comando() && parteElse();
-              }
-              else
-              {
-                  return erro();
-              }
-          }
-          else if (currentToken.symbol == "while")
-          {
-              if(expressao())
-              {
-                  getSymbol();
-                  if(currentToken.symbol == "do")
-                  {
-                      return comando();
-                  }
-                  else
-                  {
-                      return erro();
-                  }
-              }
-              else
-              {
-                  return erro();
-              }
-          }
-          else
-          {
-              return erro();
-          }
-      }
-        return erro();
+        getSymbol();
+        if(currentToken.symbol == "if")
+        {
+            if(expressao())
+            {
+                getSymbol();
+                if(currentToken.symbol == "then")
+                {
+                    return comando() && parteElse();
+                }
+                else
+                {
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else if (currentToken.symbol == "while")
+        {
+            if(expressao())
+            {
+                getSymbol();
+                if(currentToken.symbol == "do")
+                {
+                    return comando();
+                }
+                else
+                {
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
     }
-}
+  }
 
 int listaDeComandos_()
 {
@@ -589,6 +597,10 @@ int declaracaoDeSubprograma()
                             if(comandoComposto())
                             {
                                 return 1;
+                            }
+                            else
+                            {
+                                return erro();
                             }
                         }
                         else
