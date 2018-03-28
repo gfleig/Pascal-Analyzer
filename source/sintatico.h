@@ -278,7 +278,15 @@ int listaDeComandos()
 
 int comandosOpcionais()
 {
-
+    if(listaDeComandos())
+    {
+        return 1;
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
 }
 
 int comandoComposto()
@@ -403,17 +411,80 @@ int argumentos()
 
 int declaracaoDeSubprograma()
 {
-
+    getSymbol();
+    if(currentToken.symbol == "procedure")
+    {
+        getSymbol();
+        if(currentToken.TokenType == "Identificador")
+        {
+            if(argumentos())
+            {
+                getSymbol();
+                if(currentToken.symbol == ";")
+                {
+                    if(declaracoesVariaveis())
+                    {
+                        if(declaracaoDeSubprogramas())
+                        {
+                            if(comandoComposto())
+                            {
+                                return 1;
+                            }
+                        }
+                        else
+                        {
+                            return erro();
+                        }
+                    }
+                    else
+                    {
+                        return erro();
+                    }
+                }
+                else
+                {
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        return erro();
+    }
 }
 
-int declaracaoDeSubprogramas_()
+int declaracoesDeSubprogramas_()
 {
-
+    if(declaracaoDeSubprograma())
+    {
+        getSymbol();
+        if(currentToken.symbol == ";")
+        {
+            return declaracoesDeSubprogramas_();
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        return 1;
+    }
 }
 
-int declaracaoDeSubprogramas()
+int declaracoesDeSubprogramas()
 {
-
+    return declaracoesDeSubprogramas_();
 }
 
 int tipo()
@@ -578,7 +649,19 @@ int programa()
                                 return erro();
                             }
                         }
+                        else
+                        {
+                            return erro();
+                        }
                     }
+                    else
+                    {
+                        return erro();
+                    }
+                }
+                else
+                {
+                    return erro();
                 }
             }
             else
