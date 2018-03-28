@@ -832,7 +832,7 @@ int programa()
 
                             if(currentToken.symbol == ".")
                             {
-                                cout << "Programa Correto! " << currentToken.line << endl;
+                                cout << "Programa Correto! " << endl;
                                 return 1;
                             }
                             else
