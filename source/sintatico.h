@@ -3,7 +3,7 @@ int currentIndex = 0;
 
 int erro()
 {
-  cout << "ERROR on line " << currentToken.currentLine << endl;
+  cout << "ERROR on line " << currentToken.line << endl;
   return 0;
 }
 
@@ -74,7 +74,7 @@ int fator()
         currentToken.TokenType == "Real" ||
         currentToken.symbol == "true" ||
         currentToken.symbol == "false"
-    )
+      )
     {
         return 1;
     }
@@ -262,7 +262,29 @@ int ativacaoDeProcedimento()
         getSymbol();
         if(currentToken.symbol == "(")
         {
-            
+            if(listaDeExpressoes())
+            {                   
+                getSymbol();
+                if(currentToken.symbol == ")")
+                {
+                    return 1;
+                }
+                else
+                {
+                    currentIndex = currentIndex - 2;                 //desfazendo os 2 get's
+                    return erro();
+                }
+            }
+            else
+            {
+                --currentIndex;
+                return erro();
+            }
+        }
+        else
+        {
+            --currentIndex;
+            return erro();
         }
     }
     else
@@ -301,17 +323,83 @@ int parteElse()
 
 int comando()
 {
-
+    if(variavel())
+    {
+        getSymbol();
+        if(currentToken.TokenType == "Atribuição")
+        {
+            return expressao();
+        }
+    }
+    else if (ativacaoDeProcedimento()) {
+        return 1;
+    }
+    else if (comandoComposto())
+    {
+        return 1;
+    }
+    else
+    {
+      getSymbol();
+      if(currentToken.symbol == "if")
+      {
+          if(expressao())
+          {
+              getSymbol();
+              if(currentToken.symbol == "then")
+              {
+                  return comando() && parteElse();
+              }
+              else
+              {
+                  return erro();
+              }
+          }
+          else if (currentToken.symbol == "while")
+          {
+              if(expressao())
+              {
+                  getSymbol();
+                  if(currentToken.symbol == "do")
+                  {
+                      return comando();
+                  }
+                  else
+                  {
+                      return erro();
+                  }
+              }
+              else
+              {
+                  return erro();
+              }
+          }
+          else
+          {
+              return erro();
+          }
+      }
+        return erro();
+    }
 }
 
 int listaDeComandos_()
 {
-
+    getSymbol();
+    if(currentToken.symbol == ";")
+    {
+        return comando() && listaDeComandos_();
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
 }
 
 int listaDeComandos()
 {
-
+    return comando() && listaDeComandos_();
 }
 
 int comandosOpcionais()
@@ -462,7 +550,7 @@ int declaracaoDeSubprograma()
                 {
                     if(declaracoesVariaveis())
                     {
-                        if(declaracaoDeSubprogramas())
+                        if(declaracoesDeSubprogramas())
                         {
                             if(comandoComposto())
                             {
@@ -672,7 +760,7 @@ int programa()
             {
                 if (declaracoesVariaveis())
                 {
-                    if (declaracaoDeSubprogramas())
+                    if (declaracoesDeSubprogramas())
                     {
                         if (comandoComposto())
                         {
