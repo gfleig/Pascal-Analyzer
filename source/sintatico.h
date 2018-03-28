@@ -56,7 +56,7 @@ int opRelacional()
 int sinal()
 {
     getSymbol();
-    if( currentToken.symbol == "+"  || 
+    if( currentToken.symbol == "+"  ||
         currentToken.symbol == "-")
     {
         return 1;
@@ -93,7 +93,7 @@ int fator()
                 return 1;
                 }
                 else
-                {   
+                {
                     return erro();
                 }
             }
@@ -142,7 +142,7 @@ int termo_()
     if(opMultiplicativo())
     {
         if(fator())
-        {            
+        {
             if(termo_())
             {
                 return 1;
@@ -161,7 +161,7 @@ int termo_()
     {
         --currentIndex;
         return 1;
-    }    
+    }
 }
 
 int termo()
@@ -316,7 +316,7 @@ int listaDeParametros_()
 
 int listaDeParametros()
 {
-    
+
 }
 
 int argumentos()
@@ -339,7 +339,7 @@ int argumentos()
         else
         {
             return erro();
-        }        
+        }
     }
     else
     {
@@ -366,8 +366,8 @@ int declaracaoDeSubprogramas()
 int tipo()
 {
     getSymbol();
-    if( currentToken.TokenType == "integer" || 
-        currentToken.TokenType == "real" || 
+    if( currentToken.TokenType == "integer" ||
+        currentToken.TokenType == "real" ||
         currentToken.TokenType == "boolean")
     {
         return 1;
@@ -385,17 +385,78 @@ int listaDeIdentificadores_()
 
 int listaDeIdentificadores()
 {
-    
+
 }
 
 int listaDeclaracaoVariaveis_()
 {
-
+    if(listaDeIdentificadores())
+    {
+        getSymbol();
+        if(currentToken.symbol == ":")
+        {
+            if(tipo())
+            {
+                getSymbol();
+                if(currentToken.symbol == ";")
+                {
+                    return listaDeIdentificadores_();
+                }
+                else
+                {
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
 }
 
 int listaDeclaracaoVariaveis()
 {
-    
+    if(listaDeIdentificadores())
+    {
+        getSymbol();
+        if(currentToken.symbol == ":")
+        {
+            if(tipo())
+            {
+                getSymbol();
+                if(currentToken.symbol == ";")
+                {
+                    return listaDeclaracaoVariaveis_();
+                }
+                else
+                {
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        return erro();
+    }
 }
 
 int declaracoesVariaveis()
@@ -440,19 +501,19 @@ int programa()
                             }
                         }
                     }
-                }                
+                }
             }
             else
             {
                 return erro();
-            }            
+            }
         }
         else
         {
             return erro();
         }
     }
-    else 
+    else
     {
         return erro();
     }
