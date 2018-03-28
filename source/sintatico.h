@@ -73,8 +73,8 @@ int fator()
     if( currentToken.TokenType == "Inteiro" ||
         currentToken.TokenType == "Real" ||
         currentToken.symbol == "true" ||
-        currentToken.symbol == "false" ||
-    )
+        currentToken.symbol == "false"
+      )
     {
         return 1;
     }
