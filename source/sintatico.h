@@ -37,7 +37,6 @@ int opRelacional();
 
 int erro()
 {
-  cout << "ERROR on line " << currentToken.line << endl;
   return 0;
 }
 
@@ -414,6 +413,7 @@ int comando()
                 }
                 else
                 {
+                    --currentIndex;
                     return erro();
                 }
             }
@@ -425,6 +425,7 @@ int comando()
         }
         else
         {
+            --currentIndex;
             return erro();
         }
     }
@@ -469,12 +470,14 @@ int comandoComposto()
         if(comandosOpcionais())
         {
             getSymbol();
+            cout << "ERROR on line " << currentToken.symbol << endl;
             if(currentToken.symbol == "end")
             {
                 return 1;
             }
             else
             {
+                --currentIndex;
                 return erro();
             }
         }
@@ -653,6 +656,7 @@ int declaracoesDeSubprogramas_()
         }
         else
         {
+            --currentIndex;
             return erro();
         }
     }
@@ -830,36 +834,43 @@ int programa()
                             }
                             else
                             {
+                                cout << "ERROR on line " << currentToken.line << endl;
                                 return erro();
                             }
                         }
                         else
                         {
+                            cout << "ERROR on line" << currentToken.line << endl;
                             return erro();
                         }
                     }
                     else
                     {
+                        cout << "ERROR on line " << currentToken.line << endl;
                         return erro();
                     }
                 }
                 else
                 {
+                    cout << "ERROR on line " << currentToken.line << endl;
                     return erro();
                 }
             }
             else
             {
+                cout << "ERROR on line " << currentToken.line << endl;
                 return erro();
             }
         }
         else
         {
+            cout << "ERROR on line " << currentToken.line << endl;
             return erro();
         }
     }
     else
     {
+        cout << "ERROR on line " << currentToken.line << endl;
         return erro();
     }
 }
