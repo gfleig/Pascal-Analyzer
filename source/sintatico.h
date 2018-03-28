@@ -839,3 +839,8 @@ int programa()
         return erro();
     }
 }
+
+void checkTable()
+{
+    return programa();
+}

@@ -7,6 +7,7 @@ int main()
     program.open("teste");
 
     createTable(program);
+    checkTable();
 
     return 0;
 }
