@@ -84,6 +84,7 @@ int opRelacional()
     }
     else
     {
+        --currentIndex;
         return erro();
     }
 }
@@ -98,6 +99,7 @@ int sinal()
     }
     else
     {
+        --currentIndex;
         return erro();
     }
 }
@@ -160,6 +162,7 @@ int fator()
             }
             else
             {
+                --currentIndex;
                 return erro();
             }
         }
@@ -307,13 +310,12 @@ int ativacaoDeProcedimento()
                 }
                 else
                 {
-                    currentIndex = currentIndex - 2;                 //desfazendo os 2 get's
+                    --currentIndex;
                     return erro();
                 }
             }
             else
             {
-                --currentIndex;
                 return erro();
             }
         }
@@ -339,6 +341,7 @@ int variavel()
     }
     else
     {
+        --currentIndex;
         return erro();
     }
 }
@@ -470,7 +473,6 @@ int comandoComposto()
         if(comandosOpcionais())
         {
             getSymbol();
-            cout << "ERROR on line " << currentToken.symbol << endl;
             if(currentToken.symbol == "end")
             {
                 return 1;
@@ -830,47 +832,48 @@ int programa()
 
                             if(currentToken.symbol == ".")
                             {
+                                cout << "Programa Correto! " << currentToken.line << endl;
                                 return 1;
                             }
                             else
                             {
-                                cout << "ERROR on line " << currentToken.line << endl;
+                                cout << "ERROR" << endl;
                                 return erro();
                             }
                         }
                         else
                         {
-                            cout << "ERROR on line" << currentToken.line << endl;
+                            cout << "ERROR" << endl;
                             return erro();
                         }
                     }
                     else
                     {
-                        cout << "ERROR on line " << currentToken.line << endl;
+                        cout << "ERROR" << endl;
                         return erro();
                     }
                 }
                 else
                 {
-                    cout << "ERROR on line " << currentToken.line << endl;
+                    cout << "ERROR" << endl;
                     return erro();
                 }
             }
             else
             {
-                cout << "ERROR on line " << currentToken.line << endl;
+                cout << "ERROR" << endl;
                 return erro();
             }
         }
         else
         {
-            cout << "ERROR on line " << currentToken.line << endl;
+            cout << "ERROR" << endl;
             return erro();
         }
     }
     else
     {
-        cout << "ERROR on line " << currentToken.line << endl;
+        cout << "ERROR" << endl;
         return erro();
     }
 }
