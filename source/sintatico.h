@@ -278,7 +278,15 @@ int listaDeComandos()
 
 int comandosOpcionais()
 {
-
+    if(listaDeComandos())
+    {
+        return 1;
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
 }
 
 int comandoComposto()
