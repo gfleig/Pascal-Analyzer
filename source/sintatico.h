@@ -837,7 +837,8 @@ int programa()
                             }
                             else
                             {
-                                --currentIndex;
+                                currentIndex -= 2;
+                                getSymbol();
                                 cout << "ERROR on line " << currentToken.line << endl;
                                 return erro();
                             }
