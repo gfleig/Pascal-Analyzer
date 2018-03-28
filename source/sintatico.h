@@ -1,6 +1,40 @@
 Token currentToken;
 int currentIndex = 0;
 
+int programa();
+int declaracoesVariaveis();
+int listaDeclaracaoVariaveis();
+int listaDeclaracaoVariaveis_();
+int listaDeIdentificadores();
+int listaDeIdentificadores_();
+int tipo();
+int declaracoesDeSubprogramas();
+int declaracoesDeSubprogramas_();
+int declaracaoDeSubprograma();
+int argumentos();
+int listaDeParametros();
+int listaDeParametros_();
+int comandoComposto();
+int comandosOpcionais();
+int listaDeComandos();
+int listaDeComandos_();
+int comando();
+int parteElse();
+int variavel();
+int ativacaoDeProcedimento();
+int listaDeExpressoes();
+int listaDeExpressoes_();
+int expressao();
+int expressaoSimples();
+int expressaoSimples_();
+int termo();
+int termo_();
+int fator();
+int sinal();
+int opMultiplicativo();
+int opAditivo();
+int opRelacional();
+
 int erro()
 {
   cout << "ERROR on line " << currentToken.line << endl;
@@ -263,7 +297,7 @@ int ativacaoDeProcedimento()
         if(currentToken.symbol == "(")
         {
             if(listaDeExpressoes())
-            {                   
+            {
                 getSymbol();
                 if(currentToken.symbol == ")")
                 {
