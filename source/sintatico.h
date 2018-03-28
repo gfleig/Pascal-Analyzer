@@ -73,7 +73,7 @@ int fator()
     if( currentToken.TokenType == "Inteiro" ||
         currentToken.TokenType == "Real" ||
         currentToken.symbol == "true" ||
-        currentToken.symbol == "false" ||
+        currentToken.symbol == "false"
     )
     {
         return 1;
@@ -256,7 +256,20 @@ int listaDeExpressoes()
 
 int ativacaoDeProcedimento()
 {
-
+    getSymbol();
+    if(currentToken.TokenType == "Identificador")
+    {
+        getSymbol();
+        if(currentToken.symbol == "(")
+        {
+            
+        }
+    }
+    else
+    {
+        --currentIndex;
+        return erro();
+    }
 }
 
 int variavel()
