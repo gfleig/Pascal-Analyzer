@@ -230,12 +230,28 @@ int expressao()
 
 int listaDeExpressoes_()
 {
-
+    getSymbol();
+    if(currentToken.symbol == ",")
+    {
+        if(expressao())
+        {
+            return listaDeExpressoes_();
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
 }
 
 int listaDeExpressoes()
 {
-
+    return (expressao() && listaDeExpressoes_());
 }
 
 int ativacaoDeProcedimento()
@@ -258,7 +274,16 @@ int variavel()
 
 int parteElse()
 {
-
+    getSymbol();
+    if(currentToken.symbol == "else")
+    {
+        return comando();
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
 }
 
 int comando()
