@@ -588,7 +588,19 @@ int programa()
                                 return erro();
                             }
                         }
+                        else
+                        {
+                            return erro();
+                        }
                     }
+                    else
+                    {
+                        return erro();
+                    }
+                }
+                else
+                {
+                    return erro();
                 }
             }
             else
