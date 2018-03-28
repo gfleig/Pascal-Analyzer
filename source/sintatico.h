@@ -476,7 +476,7 @@ int comandoComposto()
         }
         else
         {
-            erro();
+            return erro();
         }
     }
     else
