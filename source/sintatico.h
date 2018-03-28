@@ -266,7 +266,7 @@ int expressao()
         {
             return 1;
         }
-    }    
+    }
     else
     {
         return erro();
@@ -461,14 +461,14 @@ int listaDeComandos()
 
 int comandosOpcionais()
 {
-    if(listaDeComandos())
+    getSymbol();
+    if(currentToken.symbol == "end")
     {
+        --currentIndex;
         return 1;
     }
-    else
-    {
-        return 1;
-    }
+    --currentIndex;
+    return listaDeComandos();
 }
 
 int comandoComposto()
@@ -578,6 +578,7 @@ int argumentos()
             }
             else
             {
+                --currentIndex;
                 return erro();
             }
         }
