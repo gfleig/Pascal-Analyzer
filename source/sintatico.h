@@ -3,7 +3,7 @@ int currentIndex = 0;
 
 int erro()
 {
-  cout << "ERROR on line " << currentToken.currentLine << endl;
+  cout << "ERROR on line " << currentToken.line << endl;
   return 0;
 }
 
