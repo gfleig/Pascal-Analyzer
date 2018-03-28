@@ -258,12 +258,15 @@ int expressao()
 {
     if(expressaoSimples())
     {
-        return 1;
-    }
-    else if(expressaoSimples() && opRelacional() && expressaoSimples())
-    {
-        return 1;
-    }
+        if(opRelacional() && expressaoSimples())
+        {
+            return 1;
+        }
+        else
+        {
+            return 1;
+        }
+    }    
     else
     {
         return erro();
