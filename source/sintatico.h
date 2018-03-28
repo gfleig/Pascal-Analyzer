@@ -311,12 +311,65 @@ int comandoComposto()
 
 int listaDeParametros_()
 {
-
+    getSymbol();
+    if(currentToken.symbol == ";")
+    {
+        if(listaDeIdentificadores())
+        {
+            getSymbol();
+            if(currentToken.symbol == ":")
+            {
+                if(tipo())
+                {
+                    return listaDeParametros_();
+                }
+                else
+                {
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
 }
 
 int listaDeParametros()
 {
-
+    if(listaDeIdentificadores())
+    {
+        getSymbol();
+        if(currentToken.symbol == ":")
+        {
+            if(tipo())
+            {
+                return listaDeParametros_();
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        return erro();
+    }
 }
 
 int argumentos()
