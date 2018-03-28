@@ -837,43 +837,44 @@ int programa()
                             }
                             else
                             {
-                                cout << "ERROR" << endl;
+                                --currentIndex;
+                                cout << "ERROR on line " << currentToken.line << endl;
                                 return erro();
                             }
                         }
                         else
                         {
-                            cout << "ERROR" << endl;
+                            cout << "ERROR on line " << currentToken.line << endl;
                             return erro();
                         }
                     }
                     else
                     {
-                        cout << "ERROR" << endl;
+                        cout << "ERROR on line " << currentToken.line << endl;
                         return erro();
                     }
                 }
                 else
                 {
-                    cout << "ERROR" << endl;
+                    cout << "ERROR on line " << currentToken.line << endl;
                     return erro();
                 }
             }
             else
             {
-                cout << "ERROR" << endl;
+                cout << "ERROR on line " << currentToken.line << endl;
                 return erro();
             }
         }
         else
         {
-            cout << "ERROR" << endl;
+            cout << "ERROR on line " << currentToken.line << endl;
             return erro();
         }
     }
     else
     {
-        cout << "ERROR" << endl;
+        cout << "ERROR on line " << currentToken.line << endl;
         return erro();
     }
 }
