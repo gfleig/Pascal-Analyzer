@@ -662,9 +662,9 @@ int declaracoesDeSubprogramas()
 int tipo()
 {
     getSymbol();
-    if( currentToken.TokenType == "integer" ||
-        currentToken.TokenType == "real" ||
-        currentToken.TokenType == "boolean")
+    if( currentToken.symbol == "integer" ||
+        currentToken.symbol == "real" ||
+        currentToken.symbol == "boolean")
     {
         return 1;
     }
@@ -705,47 +705,12 @@ int listaDeIdentificadores()
     }
     else
     {
+        --currentIndex;
         return erro();
     }
 }
 
 int listaDeclaracaoVariaveis_()
-{
-    if(listaDeIdentificadores())
-    {
-        getSymbol();
-        if(currentToken.symbol == ":")
-        {
-            if(tipo())
-            {
-                getSymbol();
-                if(currentToken.symbol == ";")
-                {
-                    return listaDeIdentificadores_();
-                }
-                else
-                {
-                    return erro();
-                }
-            }
-            else
-            {
-                return erro();
-            }
-        }
-        else
-        {
-            return erro();
-        }
-    }
-    else
-    {
-        --currentIndex;
-        return 1;
-    }
-}
-
-int listaDeclaracaoVariaveis()
 {
     if(listaDeIdentificadores())
     {
@@ -771,6 +736,44 @@ int listaDeclaracaoVariaveis()
         }
         else
         {
+            --currentIndex;
+            return erro();
+        }
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+int listaDeclaracaoVariaveis()
+{
+    if(listaDeIdentificadores())
+    {
+        getSymbol();
+        if(currentToken.symbol == ":")
+        {
+            if(tipo())
+            {
+                getSymbol();
+                if(currentToken.symbol == ";")
+                {
+                    return listaDeclaracaoVariaveis_();
+                }
+                else
+                {
+                    --currentIndex;
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            --currentIndex;
             return erro();
         }
     }
@@ -789,6 +792,7 @@ int declaracoesVariaveis()
     }
     else
     {
+        --currentIndex;
         return 1;
     }
 }
