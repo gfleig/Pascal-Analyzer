@@ -320,7 +320,7 @@ int comando()
                   return erro();
               }
           }
-          else if (currentToken).symbol == "while")
+          else if (currentToken.symbol == "while")
           {
               if(expressao())
               {
