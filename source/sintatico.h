@@ -840,7 +840,7 @@ int programa()
     }
 }
 
-void checkTable()
+int checkTable()
 {
     return programa();
 }
