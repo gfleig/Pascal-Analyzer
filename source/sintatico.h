@@ -301,39 +301,28 @@ int listaDeExpressoes()
 
 int ativacaoDeProcedimento()
 {
-    getSymbol();
-    if(currentToken.TokenType == "Identificador")
+    if(currentToken.symbol == "(")
     {
-        getSymbol();
-        if(currentToken.symbol == "(")
+        if(listaDeExpressoes())
         {
-            if(listaDeExpressoes())
+            getSymbol();
+            if(currentToken.symbol == ")")
             {
-                getSymbol();
-                if(currentToken.symbol == ")")
-                {
-                    return 1;
-                }
-                else
-                {
-                    --currentIndex;
-                    return erro();
-                }
+                return 1;
             }
             else
             {
+                --currentIndex;
                 return erro();
             }
         }
         else
         {
-            --currentIndex;
             return erro();
         }
     }
     else
     {
-        --currentIndex;
         return erro();
     }
 }
@@ -375,15 +364,15 @@ int comando()
         {
             return expressao();
         }
+        else if (ativacaoDeProcedimento())
+        {
+            return 1;
+        }
         else
         {
             --currentIndex;
             return erro();
         }
-    }
-    else if (ativacaoDeProcedimento())
-    {
-        return 1;
     }
     else if (comandoComposto())
     {
