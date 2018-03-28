@@ -443,12 +443,37 @@ int tipo()
 
 int listaDeIdentificadores_()
 {
-
+    getSymbol();
+    if(currentToken.symbol == ",")
+    {
+        getSymbol();
+        if(currentToken.TokenType == "Identificador")
+        {
+            return listaDeIdentificadores_();
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
 }
 
 int listaDeIdentificadores()
 {
-
+    getSymbol();
+    if(currentToken.TokenType == "Identificador")
+    {
+        return listaDeIdentificadores_();
+    }
+    else
+    {
+        return erro();
+    }
 }
 
 int listaDeclaracaoVariaveis_()
