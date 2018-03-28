@@ -112,6 +112,7 @@ int fator()
     getSymbol();
     if( currentToken.TokenType == "Inteiro" ||
         currentToken.TokenType == "Real" ||
+        currentToken.TokenType == "Real 1" ||
         currentToken.symbol == "true" ||
         currentToken.symbol == "false"
       )
@@ -674,6 +675,7 @@ int tipo()
     getSymbol();
     if( currentToken.symbol == "integer" ||
         currentToken.symbol == "real" ||
+        currentToken.symbol == "real1" ||
         currentToken.symbol == "boolean")
     {
         return 1;
