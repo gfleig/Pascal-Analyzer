@@ -45,9 +45,9 @@ void initializeTable(){
 }
 
 //checa se existe um ident. com esse nome
-int callSymbol(string symbol){
+int callSymbol(){
     for(int i = symbolTable.size() - 1; i > 0; --i){
-        if(symbolTable[i] == symbol){
+        if(symbolTable[i] == currentToken.symbol){
             return 1;
         }
     }
@@ -55,13 +55,13 @@ int callSymbol(string symbol){
 } 
 
 //checa até o primeiro MARK se já tem alguma var com o memso nome
-int declareSymbol(string symbol){
+int declareSymbol(){
     for(int i = symbolTable.size() - 1; i >= 0; --i){
         if(symbolTable[i] == "$"){
-            symbolTable.push_back(symbol);
+            symbolTable.push_back(currentToken.symbol);
             return 1;            
         }
-        else if(symbolTable[i] == symbol){
+        else if(symbolTable[i] == currentToken.symbol){
             return 0;        
         }        
     }
