@@ -1,6 +1,8 @@
 Token currentToken;
 unsigned int currentIndex = 0;
 
+string errorMessage;
+
 int programa();
 int declaracoesVariaveis();
 int listaDeclaracaoVariaveis();
@@ -35,8 +37,17 @@ int opMultiplicativo();
 int opAditivo();
 int opRelacional();
 
-int erro(){
-  return 0;
+
+
+int erro(string message){
+    static int check = 0;
+
+    if(!check){
+        errorMessage = message;
+        ++check;
+    }
+
+    return 0;
 }
 
 void getSymbol(){
