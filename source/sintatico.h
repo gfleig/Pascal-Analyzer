@@ -54,7 +54,7 @@ void callSymbol(){
         }
     }
     if(!aux){
-      cout << "Undeclared identifier on line" << currentToken.line << endl;
+      cout << "Undeclared identifier on line " << currentToken.line << endl;
     }
 }
 
@@ -66,7 +66,7 @@ void declareSymbol(){
             break;
         }
         else if(symbolTable[i] == currentToken.symbol){
-            cout << "Already declared identifier on line" << currentToken.line << endl;
+            cout << "Already declared identifier on line " << currentToken.line << endl;
             break;
         }
     }
