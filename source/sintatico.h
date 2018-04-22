@@ -660,37 +660,37 @@ int programa(){
                                 --currentIndex;
                                 getSymbol();
                                 cout << "ERROR on line " << currentToken.line << endl;
-                                return erro("Default");
+                                return erro("Expected '.' at the end of the program");
                             }
                         }
                         else{
                             cout << "ERROR on line " << currentToken.line << endl;
-                            return erro("Default");
+                            return 0;
                         }
                     }
                     else{
                         cout << "ERROR on line " << currentToken.line << endl;
-                        return erro("Default");
+                        return 0;
                     }
                 }
                 else{
                     cout << "ERROR on line " << currentToken.line << endl;
-                    return erro("Default");
+                    return 0;
                 }
             }
             else{
                 cout << "ERROR on line " << currentToken.line << endl;
-                return erro("Default");
+                return erro("Expected ';' after program identifier");
             }
         }
         else{
             cout << "ERROR on line " << currentToken.line << endl;
-            return erro("Default");
+            return erro("Expected identifier after keyword 'program'");
         }
     }
     else{
         cout << "ERROR on line " << currentToken.line << endl;
-        return erro("Expected keyword program at the start");
+        return erro("Expected keyword 'program' at the start");
     }
 }
 
