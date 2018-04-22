@@ -64,7 +64,7 @@ int opMultiplicativo(){
     }
     else{
         --currentIndex;
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -75,7 +75,7 @@ int opAditivo(){
     }
     else{
         --currentIndex;
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -86,7 +86,7 @@ int opRelacional(){
     }
     else{
         --currentIndex;
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -98,7 +98,7 @@ int sinal(){
     }
     else{
         --currentIndex;
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -122,11 +122,11 @@ int fator(){
                 }
                 else{
                     --currentIndex;
-                    return erro();
+                    return erro("Default");
                 }
             }
             else{
-                return erro();
+                return erro("Default");
             }
         }
         else{
@@ -146,16 +146,16 @@ int fator(){
             }
             else{
                 --currentIndex;
-                return erro();
+                return erro("Default");
             }
         }
         else{
-            return erro();
+            return erro("Default");
         }
     }
     else{
         --currentIndex;
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -166,11 +166,11 @@ int termo_(){
                 return 1;
             }
             else{
-                return erro();
+                return erro("Default");
             }
         }
         else{
-            return erro();
+            return erro("Default");
         }
     }
     else{
@@ -189,11 +189,11 @@ int expressaoSimples_(){
                 return 1;
             }
             else{
-                return erro();
+                return erro("Default");
             }
         }
         else{
-            return erro();
+            return erro("Default");
         }
     }
     else{
@@ -209,7 +209,7 @@ int expressaoSimples(){
         return 1;
     }
     else{
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -223,7 +223,7 @@ int expressao(){
         }
     }
     else{
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -234,7 +234,7 @@ int listaDeExpressoes_(){
             return listaDeExpressoes_();
         }
         else{
-            return erro();
+            return erro("Default");
         }
     }
     else{
@@ -256,15 +256,15 @@ int ativacaoDeProcedimento(){
             }
             else{
                 --currentIndex;
-                return erro();
+                return erro("Default");
             }
         }
         else{
-            return erro();
+            return erro("Default");
         }
     }
     else{
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -275,7 +275,7 @@ int variavel(){
     }
     else{
         --currentIndex;
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -301,7 +301,7 @@ int comando(){
         }
         else{
             --currentIndex;
-            return erro();
+            return erro("Default");
         }
     }
     else if (comandoComposto()){
@@ -316,11 +316,11 @@ int comando(){
                     return comando() && parteElse();
                 }
                 else{
-                    return erro();
+                    return erro("Default");
                 }
             }
             else{
-                return erro();
+                return erro("Default");
             }
         }
         else if (currentToken.symbol == "while"){
@@ -331,17 +331,17 @@ int comando(){
                 }
                 else{
                     --currentIndex;
-                    return erro();
+                    return erro("Default");
                 }
             }
             else{
                 --currentIndex;
-                return erro();
+                return erro("Default");
             }
         }
         else{
             --currentIndex;
-            return erro();
+            return erro("Default");
         }
     }
   }
@@ -381,16 +381,16 @@ int comandoComposto(){
             }
             else{
                 --currentIndex;
-                return erro();
+                return erro("Default");
             }
         }
         else{
-            return erro();
+            return erro("Default");
         }
     }
     else{
         --currentIndex;
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -405,15 +405,15 @@ int listaDeParametros_(){
                     return listaDeParametros_();
                 }
                 else{
-                    return erro();
+                    return erro("Default");
                 }
             }
             else{
-                return erro();
+                return erro("Default");
             }
         }
         else{
-            return erro();
+            return erro("Default");
         }
     }
     else{
@@ -430,15 +430,15 @@ int listaDeParametros(){
                 return listaDeParametros_();
             }
             else{
-                return erro();
+                return erro("Default");
             }
         }
         else{
-            return erro();
+            return erro("Default");
         }
     }
     else{
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -452,11 +452,11 @@ int argumentos(){
             }
             else{
                 --currentIndex;
-                return erro();
+                return erro("Default");
             }
         }
         else{
-            return erro();
+            return erro("Default");
         }
     }
     else{
@@ -479,34 +479,34 @@ int declaracaoDeSubprograma(){
                                 return 1;
                             }
                             else{
-                                return erro();
+                                return erro("Default");
                             }
                         }
                         else{
-                            return erro();
+                            return erro("Default");
                         }
                     }
                     else{
-                        return erro();
+                        return erro("Default");
                     }
                 }
                 else{
                     --currentIndex;
-                    return erro();
+                    return erro("Default");
                 }
             }
             else{
-                return erro();
+                return erro("Default");
             }
         }
         else{
             --currentIndex;
-            return erro();
+            return erro("Default");
         }
     }
     else{
         --currentIndex;
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -518,7 +518,7 @@ int declaracoesDeSubprogramas_(){
         }
         else{
             --currentIndex;
-            return erro();
+            return erro("Default");
         }
     }
     else{
@@ -539,7 +539,7 @@ int tipo(){
         return 1;
     }
     else{
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -551,7 +551,7 @@ int listaDeIdentificadores_(){
             return listaDeIdentificadores_();
         }
         else{
-            return erro();
+            return erro("Default");
         }
     }
     else{
@@ -567,7 +567,7 @@ int listaDeIdentificadores(){
     }
     else{
         --currentIndex;
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -581,16 +581,16 @@ int listaDeclaracaoVariaveis_(){
                     return listaDeclaracaoVariaveis_();
                 }
                 else{
-                    return erro();
+                    return erro("Default");
                 }
             }
             else{
-                return erro();
+                return erro("Default");
             }
         }
         else{
             --currentIndex;
-            return erro();
+            return erro("Default");
         }
     }
     else{
@@ -609,20 +609,20 @@ int listaDeclaracaoVariaveis(){
                 }
                 else{
                     --currentIndex;
-                    return erro();
+                    return erro("Default");
                 }
             }
             else{
-                return erro();
+                return erro("Default");
             }
         }
         else{
             --currentIndex;
-            return erro();
+            return erro("Default");
         }
     }
     else{
-        return erro();
+        return erro("Default");
     }
 }
 
@@ -660,40 +660,42 @@ int programa(){
                                 --currentIndex;
                                 getSymbol();
                                 cout << "ERROR on line " << currentToken.line << endl;
-                                return erro();
+                                return erro("Default");
                             }
                         }
                         else{
                             cout << "ERROR on line " << currentToken.line << endl;
-                            return erro();
+                            return erro("Default");
                         }
                     }
                     else{
                         cout << "ERROR on line " << currentToken.line << endl;
-                        return erro();
+                        return erro("Default");
                     }
                 }
                 else{
                     cout << "ERROR on line " << currentToken.line << endl;
-                    return erro();
+                    return erro("Default");
                 }
             }
             else{
                 cout << "ERROR on line " << currentToken.line << endl;
-                return erro();
+                return erro("Default");
             }
         }
         else{
             cout << "ERROR on line " << currentToken.line << endl;
-            return erro();
+            return erro("Default");
         }
     }
     else{
         cout << "ERROR on line " << currentToken.line << endl;
-        return erro();
+        return erro("Expected keyword program at the start");
     }
 }
 
 int checkTable(){
-    return programa();
+    int returnCode = programa();
+    cout << errorMessage << endl;
+    return returnCode;
 }
