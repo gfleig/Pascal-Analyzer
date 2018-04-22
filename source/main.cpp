@@ -1,8 +1,7 @@
 #include "lexico.h"
 #include "sintatico.h"
 
-int main()
-{
+int main(){
     ifstream program;
     program.open("teste");
 

@@ -6,14 +6,14 @@ var
     PercentageMark : real;
     x: integer;
 begin { PassOrFailSystem }
-    
+
 
     PercentageMark := (ActualMark / PossibleMark) * 100;
 
     if (5 >= 1) then
-        
-            x := (2 * (25 / 4)) + (2 * 10);
-            
+
+            x := (2 * (25 / 4)) + (2 * 10)
+
     { EndIf }
 
 end. { PassOrFailSystem }
