@@ -5,6 +5,18 @@ var
     PossibleMark : integer;
     PercentageMark : real;
     x: integer;
+
+procedure second;
+
+var
+   ActualMark : integer;
+
+begin
+
+   ActualMark := 10
+
+end;
+
 begin { PassOrFailSystem }
     
 

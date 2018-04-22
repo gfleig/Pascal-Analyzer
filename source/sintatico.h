@@ -45,35 +45,40 @@ void initializeTable(){
 }
 
 //checa se existe um ident. com esse nome
-int callSymbol(){
+void callSymbol(){
+    int aux = 0;
     for(int i = symbolTable.size() - 1; i > 0; --i){
         if(symbolTable[i] == currentToken.symbol){
-            return 1;
+            aux++;
+            break;
         }
     }
-    return 0;
-} 
+    if(!aux){
+      cout << "Undeclared identifier on line" << currentToken.line << endl;
+    }
+}
 
 //checa até o primeiro MARK se já tem alguma var com o memso nome
-int declareSymbol(){
+void declareSymbol(){
     for(int i = symbolTable.size() - 1; i >= 0; --i){
         if(symbolTable[i] == "$"){
             symbolTable.push_back(currentToken.symbol);
-            return 1;            
+            break;
         }
         else if(symbolTable[i] == currentToken.symbol){
-            return 0;        
-        }        
+            cout << "Already declared identifier on line" << currentToken.line << endl;
+            break;
+        }
     }
 }
 
 //coloca um MARK pra sinalizar novo escopo
-int enterScope(){
+void enterScope(){
     symbolTable.push_back("$");
 }
 
 //para sair do escopo atual, deleta-se tudo até o primeiro MARK, inclusive o próprio MARK.
-int exitScope(){
+void exitScope(){
     while(symbolTable.back() != "$"){
         symbolTable.pop_back();
     }
@@ -152,6 +157,7 @@ int fator(){
         return 1;
     }
     else if (currentToken.TokenType == "Identificador"){
+        callSymbol();
         getSymbol();
 
         if (currentToken.symbol == "("){
@@ -312,6 +318,7 @@ int ativacaoDeProcedimento(){
 int variavel(){
     getSymbol();
     if(currentToken.TokenType == "Identificador"){
+        callSymbol();
         return 1;
     }
     else{
@@ -509,14 +516,17 @@ int argumentos(){
 int declaracaoDeSubprograma(){
     getSymbol();
     if(currentToken.symbol == "procedure"){
+        enterScope();
         getSymbol();
         if(currentToken.TokenType == "Identificador"){
+            declareSymbol();
             if(argumentos()){
                 getSymbol();
                 if(currentToken.symbol == ";"){
                     if(declaracoesVariaveis()){
                         if(declaracoesDeSubprogramas()){
                             if(comandoComposto()){
+                                exitScope();
                                 return 1;
                             }
                             else{
@@ -589,6 +599,7 @@ int listaDeIdentificadores_(){
     if(currentToken.symbol == ","){
         getSymbol();
         if(currentToken.TokenType == "Identificador"){
+            declareSymbol();
             return listaDeIdentificadores_();
         }
         else{
@@ -604,6 +615,7 @@ int listaDeIdentificadores_(){
 int listaDeIdentificadores(){
     getSymbol();
     if(currentToken.TokenType == "Identificador"){
+        declareSymbol();
         return listaDeIdentificadores_();
     }
     else{
@@ -688,6 +700,7 @@ int programa(){
     if( currentToken.symbol == "program"){
         getSymbol();
         if(currentToken.TokenType == "Identificador"){
+            declareSymbol();
             getSymbol();
             if(currentToken.symbol == ";"){
                 if (declaracoesVariaveis()){

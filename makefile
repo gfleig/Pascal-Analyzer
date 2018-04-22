@@ -4,7 +4,7 @@
 BDIR = build
 SDIR = source
 
-EXECUTABLE = $(BDIR)/lexico
+EXECUTABLE = $(BDIR)/analisador
 
 SOURCES = $(wildcard $(SDIR)/*.cpp)
 
