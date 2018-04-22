@@ -3,6 +3,8 @@ unsigned int currentIndex = 0;
 
 string errorMessage;
 
+vector<string> symbolTable;
+
 int programa();
 int declaracoesVariaveis();
 int listaDeclaracaoVariaveis();
@@ -37,7 +39,46 @@ int opMultiplicativo();
 int opAditivo();
 int opRelacional();
 
+//inicializa a tabela de símbolos. o MARK é $.
+void initializeTable(){
+    symbolTable.push_back("$");
+}
 
+//checa se existe um ident. com esse nome
+int callSymbol(string symbol){
+    for(int i = symbolTable.size() - 1; i > 0; --i){
+        if(symbolTable[i] == symbol){
+            return 1;
+        }
+    }
+    return 0;
+} 
+
+//checa até o primeiro MARK se já tem alguma var com o memso nome
+int declareSymbol(string symbol){
+    for(int i = symbolTable.size() - 1; i >= 0; --i){
+        if(symbolTable[i] == "$"){
+            symbolTable.push_back(symbol);
+            return 1;            
+        }
+        else if(symbolTable[i] == symbol){
+            return 0;        
+        }        
+    }
+}
+
+//coloca um MARK pra sinalizar novo escopo
+int enterScope(){
+    symbolTable.push_back("$");
+}
+
+//para sair do escopo atual, deleta-se tudo até o primeiro MARK, inclusive o próprio MARK.
+int exitScope(){
+    while(symbolTable.back() != "$"){
+        symbolTable.pop_back();
+    }
+    symbolTable.pop_back();
+}
 
 int erro(string message){
     static int check = 0;
@@ -641,6 +682,8 @@ int programa(){
 
     cout << "Simbolos na tabela: " << tokenList.size() << endl;
 
+    initializeTable();
+
     getSymbol();
     if( currentToken.symbol == "program"){
         getSymbol();
@@ -696,6 +739,8 @@ int programa(){
 
 int checkTable(){
     int returnCode = programa();
-    cout << errorMessage << endl;
+    if(!returnCode){
+        cout << errorMessage << endl;
+    }
     return returnCode;
 }
