@@ -64,7 +64,7 @@ int opMultiplicativo(){
     }
     else{
         --currentIndex;
-        return erro("Default");
+        return erro("Expected multiplication operator('*', '/', or 'and')");
     }
 }
 
@@ -75,7 +75,7 @@ int opAditivo(){
     }
     else{
         --currentIndex;
-        return erro("Default");
+        return erro("Expected addition operator('+', '-', or 'or')");
     }
 }
 
@@ -86,7 +86,7 @@ int opRelacional(){
     }
     else{
         --currentIndex;
-        return erro("Default");
+        return erro("Expected relational operator('>', '<', '>=', '<=', or '=')");
     }
 }
 
@@ -98,7 +98,7 @@ int sinal(){
     }
     else{
         --currentIndex;
-        return erro("Default");
+        return erro("Expected '+' or '-'");
     }
 }
 
@@ -122,11 +122,11 @@ int fator(){
                 }
                 else{
                     --currentIndex;
-                    return erro("Default");
+                    return erro("Expected closing parentheses ')'");
                 }
             }
             else{
-                return erro("Default");
+                return erro("Expected 'listaDeExpressoes'");
             }
         }
         else{
@@ -146,16 +146,16 @@ int fator(){
             }
             else{
                 --currentIndex;
-                return erro("Default");
+                return erro("Expected closing parentheses ')'");
             }
         }
         else{
-            return erro("Default");
+            return erro("Expected 'expressao'");
         }
     }
     else{
         --currentIndex;
-        return erro("Default");
+        return erro("Expected opening parentheses '('");
     }
 }
 
@@ -166,11 +166,11 @@ int termo_(){
                 return 1;
             }
             else{
-                return erro("Default");
+                return erro("Expected 'termo_'");
             }
         }
         else{
-            return erro("Default");
+            return erro("Expected 'fator'");
         }
     }
     else{
@@ -189,11 +189,11 @@ int expressaoSimples_(){
                 return 1;
             }
             else{
-                return erro("Default");
+                return erro("Expected 'expressaoSimples_'");
             }
         }
         else{
-            return erro("Default");
+            return erro("Expected termo");
         }
     }
     else{
@@ -209,7 +209,7 @@ int expressaoSimples(){
         return 1;
     }
     else{
-        return erro("Default");
+        return erro("During 'expressaoSimples': no valid pattern detected");
     }
 }
 
@@ -223,7 +223,7 @@ int expressao(){
         }
     }
     else{
-        return erro("Default");
+        return erro("Expected expressaoSimples");
     }
 }
 
@@ -234,7 +234,7 @@ int listaDeExpressoes_(){
             return listaDeExpressoes_();
         }
         else{
-            return erro("Default");
+            return erro("Expected 'expressao'");
         }
     }
     else{
@@ -256,15 +256,15 @@ int ativacaoDeProcedimento(){
             }
             else{
                 --currentIndex;
-                return erro("Default");
+                return erro("Expected closing parentheses ')'");
             }
         }
         else{
-            return erro("Default");
+            return erro("Expected 'listaDeExpressoes'");
         }
     }
     else{
-        return erro("Default");
+        return erro("Expected opening parentheses '('");
     }
 }
 
@@ -275,7 +275,7 @@ int variavel(){
     }
     else{
         --currentIndex;
-        return erro("Default");
+        return erro("Expected identifier token");
     }
 }
 
@@ -301,7 +301,7 @@ int comando(){
         }
         else{
             --currentIndex;
-            return erro("Default");
+            return erro("In 'comando': no valid pattern detected");
         }
     }
     else if (comandoComposto()){
@@ -316,11 +316,11 @@ int comando(){
                     return comando() && parteElse();
                 }
                 else{
-                    return erro("Default");
+                    return erro("Expected 'then'");
                 }
             }
             else{
-                return erro("Default");
+                return erro("Expected 'expressao'");
             }
         }
         else if (currentToken.symbol == "while"){
@@ -331,17 +331,17 @@ int comando(){
                 }
                 else{
                     --currentIndex;
-                    return erro("Default");
+                    return erro("Expected 'do'");
                 }
             }
             else{
                 --currentIndex;
-                return erro("Default");
+                return erro("Expected 'epressao'");
             }
         }
         else{
             --currentIndex;
-            return erro("Default");
+            return erro("Expected 'while'");
         }
     }
   }
