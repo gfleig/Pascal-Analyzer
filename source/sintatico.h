@@ -381,16 +381,16 @@ int comandoComposto(){
             }
             else{
                 --currentIndex;
-                return erro("Default");
+                return erro("Expected 'end'");
             }
         }
         else{
-            return erro("Default");
+            return erro("Expected 'comandosOpcionais'");
         }
     }
     else{
         --currentIndex;
-        return erro("Default");
+        return erro("Expected 'begin'");
     }
 }
 
@@ -405,15 +405,15 @@ int listaDeParametros_(){
                     return listaDeParametros_();
                 }
                 else{
-                    return erro("Default");
+                    return erro("Expected 'tipo'");
                 }
             }
             else{
-                return erro("Default");
+                return erro("Expected ':'");
             }
         }
         else{
-            return erro("Default");
+            return erro("Expected 'listaDeIdentificadores'");
         }
     }
     else{
@@ -430,15 +430,15 @@ int listaDeParametros(){
                 return listaDeParametros_();
             }
             else{
-                return erro("Default");
+                return erro("Expected 'tipo'");
             }
         }
         else{
-            return erro("Default");
+            return erro("Expected ':'");
         }
     }
     else{
-        return erro("Default");
+        return erro("Expected 'listaDeIdentificadores'");
     }
 }
 
@@ -452,11 +452,11 @@ int argumentos(){
             }
             else{
                 --currentIndex;
-                return erro("Default");
+                return erro("Expected closing parentheses ')'");
             }
         }
         else{
-            return erro("Default");
+            return erro("Expected 'listaDeParametros'");
         }
     }
     else{
@@ -479,34 +479,34 @@ int declaracaoDeSubprograma(){
                                 return 1;
                             }
                             else{
-                                return erro("Default");
+                                return erro("Expected 'comandoComposto'");
                             }
                         }
                         else{
-                            return erro("Default");
+                            return erro("Expected 'declaracoesDeSubprogramas'");
                         }
                     }
                     else{
-                        return erro("Default");
+                        return erro("Expected 'declaracoesVariaveis'");
                     }
                 }
                 else{
                     --currentIndex;
-                    return erro("Default");
+                    return erro("Expected ;");
                 }
             }
             else{
-                return erro("Default");
+                return erro("Expected 'argumentos'");
             }
         }
         else{
             --currentIndex;
-            return erro("Default");
+            return erro("Expected identifier token");
         }
     }
     else{
         --currentIndex;
-        return erro("Default");
+        return erro("Expected keyword 'procedure'");
     }
 }
 
@@ -518,7 +518,7 @@ int declaracoesDeSubprogramas_(){
         }
         else{
             --currentIndex;
-            return erro("Default");
+            return erro("Expected ';'");
         }
     }
     else{
@@ -539,7 +539,7 @@ int tipo(){
         return 1;
     }
     else{
-        return erro("Default");
+        return erro("Expected 'integer', 'real', 'real1', or 'boolean'");
     }
 }
 
@@ -551,7 +551,7 @@ int listaDeIdentificadores_(){
             return listaDeIdentificadores_();
         }
         else{
-            return erro("Default");
+            return erro("Expected identifier token");
         }
     }
     else{
@@ -567,7 +567,7 @@ int listaDeIdentificadores(){
     }
     else{
         --currentIndex;
-        return erro("Default");
+        return erro("Expected identifier token");
     }
 }
 
@@ -581,16 +581,16 @@ int listaDeclaracaoVariaveis_(){
                     return listaDeclaracaoVariaveis_();
                 }
                 else{
-                    return erro("Default");
+                    return erro("Expected ';'");
                 }
             }
             else{
-                return erro("Default");
+                return erro("Expected 'tipo'");
             }
         }
         else{
             --currentIndex;
-            return erro("Default");
+            return erro("Expected ':'");
         }
     }
     else{
@@ -609,20 +609,20 @@ int listaDeclaracaoVariaveis(){
                 }
                 else{
                     --currentIndex;
-                    return erro("Default");
+                    return erro("Expected ';'");
                 }
             }
             else{
-                return erro("Default");
+                return erro("Expected 'tipo'");
             }
         }
         else{
             --currentIndex;
-            return erro("Default");
+            return erro("Expected ':'");
         }
     }
     else{
-        return erro("Default");
+        return erro("Expected 'listaDeIdentificadores'");
     }
 }
 
