@@ -6,6 +6,13 @@ string errorMessage;
 vector<string> symbolTable;
 vector<string> PcT;
 
+struct IdentifierAndType{
+    string identifier;
+    string type;
+};
+
+vector<IdentifierAndType> identifierList;
+
 int programa();
 int declaracoesVariaveis();
 int listaDeclaracaoVariaveis();
@@ -40,7 +47,28 @@ int opMultiplicativo();
 int opAditivo();
 int opRelacional();
 
-int updatePcT(string tokenType){
+void addIdentifier(string identifierName){
+    IdentifierAndType duo;
+    duo.identifier = identifierName;
+    duo.type = "unset";                     //identificador está "marcado"
+
+    identifierList.push_back(duo);
+}
+
+void setTypeOfidentifiers(string typeName){
+    int lastIdentifier = identifierList.size();
+
+    for(int i = lastIdentifier; i >= 0; --i){
+        if(identifierList[i].type != "unset"){
+            break;
+        }
+        else{
+            identifierList[i].type != typeName;
+        }
+    }
+}
+
+int updatePcT(){
     int top = PcT.size() - 1;
     int subtop = top - 1;
 
@@ -72,7 +100,7 @@ int updatePcT(string tokenType){
         return 0;
     }
 }
-}
+
 
 //inicializa a tabela de símbolos. o MARK é $.
 void initializeTable(){
