@@ -4,6 +4,7 @@ unsigned int currentIndex = 0;
 string errorMessage;
 
 vector<string> symbolTable;
+vector<string> PcT;
 
 int programa();
 int declaracoesVariaveis();
@@ -38,6 +39,40 @@ int sinal();
 int opMultiplicativo();
 int opAditivo();
 int opRelacional();
+
+int updatePcT(string tokenType){
+    int top = PcT.size() - 1;
+    int subtop = top - 1;
+
+    if(PcT[top] == "inteiro" && PcT[subtop] == "inteiro"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("inteiro");
+        return 1;
+    }
+    else if(PcT[top] == "inteiro" && PcT[subtop] == "real"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("real");
+        return 1;
+    }
+    else if(PcT[top] == "real" && PcT[subtop] == "inteiro"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("real");
+        return 1;
+    }
+    else if(PcT[top] == "real" && PcT[subtop] == "real"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("real");
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+}
 
 //inicializa a tabela de símbolos. o MARK é $.
 void initializeTable(){
