@@ -47,10 +47,27 @@ int opMultiplicativo();
 int opAditivo();
 int opRelacional();
 
+void initializeIdentifierList(){
+    IdentifierAndType duo;
+    duo.identifier == "$";
+    duo.type == "mark";
+    identifierList.push_back(duo);
+}
+
 void addIdentifier(){
     IdentifierAndType duo;
     duo.identifier = currentToken.symbol;
     duo.type = "unset";                     //identificador está "marcado"
+
+    for(int i = identifierList.size(); i >= 0; --i){
+        if(identifierList[i].identifier == "$"){
+            identifierList.push_back(duo);
+            break;
+        }
+        else if(identifierList[i].identifier == duo.identifier){
+            break;
+        }
+    }
 
     identifierList.push_back(duo);
 }
@@ -233,6 +250,10 @@ void declareSymbol(){
 //coloca um MARK pra sinalizar novo escopo
 void enterScope(){
     symbolTable.push_back("$");
+    IdentifierAndType duo;
+    duo.identifier == "$";
+    duo.type == "mark";
+    identifierList.push_back(duo);
 }
 
 //para sair do escopo atual, deleta-se tudo até o primeiro MARK, inclusive o próprio MARK.
@@ -856,6 +877,7 @@ int programa(){
     cout << "Simbolos na tabela: " << tokenList.size() << endl;
 
     initializeTable();
+    initializeIdentifierList();
 
     getSymbol();
     if( currentToken.symbol == "program"){
