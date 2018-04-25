@@ -63,7 +63,10 @@ void setTypeOfidentifiers(){
             break;
         }
         else{
-            identifierList[i].type = currentToken.symbol;
+            if(currentToken.TokenType == "Palavra Chave")
+              identifierList[i].type = "program";
+            else
+              identifierList[i].type = currentToken.symbol;
         }
     }
 }
@@ -859,6 +862,8 @@ int programa(){
         getSymbol();
         if(currentToken.TokenType == "Identificador"){
             declareSymbol();
+            addIdentifier();
+            setTypeOfidentifiers();
             getSymbol();
             if(currentToken.symbol == ";"){
                 if (declaracoesVariaveis()){
