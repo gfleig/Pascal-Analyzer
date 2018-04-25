@@ -63,7 +63,7 @@ void setTypeOfidentifiers(){
             break;
         }
         else{
-            identifierList[i].type = currentToken.TokenType;
+            identifierList[i].type = currentToken.symbol;
         }
     }
 }
@@ -72,28 +72,28 @@ int updatePcTArithmetic(){
     int top = PcT.size() - 1;
     int subtop = top - 1;
 
-    if(PcT[top] == "Inteiro" && PcT[subtop] == "Inteiro"){
+    if(PcT[top] == "integer" && PcT[subtop] == "integer"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("Inteiro");
+        PcT.push_back("integer");
         return 1;
     }
-    else if(PcT[top] == "Inteiro" && PcT[subtop] == "Real"){
+    else if(PcT[top] == "integer" && PcT[subtop] == "real"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("Real");
+        PcT.push_back("real");
         return 1;
     }
-    else if(PcT[top] == "Real" && PcT[subtop] == "Inteiro"){
+    else if(PcT[top] == "real" && PcT[subtop] == "integer"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("Real");
+        PcT.push_back("real");
         return 1;
     }
-    else if(PcT[top] == "Real" && PcT[subtop] == "Real"){
+    else if(PcT[top] == "real" && PcT[subtop] == "real"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("Real");
+        PcT.push_back("real");
         return 1;
     }
     else{
@@ -120,25 +120,25 @@ int updatePcTRelational(){
     int top = PcT.size() - 1;
     int subtop = top - 1;
 
-    if(PcT[top] == "Inteiro" && PcT[subtop] == "Inteiro"){
+    if(PcT[top] == "integer" && PcT[subtop] == "integer"){
         PcT.pop_back();
         PcT.pop_back();
         PcT.push_back("Boolean");
         return 1;
     }
-    else if(PcT[top] == "Inteiro" && PcT[subtop] == "Real"){
+    else if(PcT[top] == "integer" && PcT[subtop] == "real"){
         PcT.pop_back();
         PcT.pop_back();
         PcT.push_back("Boolean");
         return 1;
     }
-    else if(PcT[top] == "Real" && PcT[subtop] == "Inteiro"){
+    else if(PcT[top] == "real" && PcT[subtop] == "integer"){
         PcT.pop_back();
         PcT.pop_back();
         PcT.push_back("Boolean");
         return 1;
     }
-    else if(PcT[top] == "Real" && PcT[subtop] == "Real"){
+    else if(PcT[top] == "real" && PcT[subtop] == "real"){
         PcT.pop_back();
         PcT.pop_back();
         PcT.push_back("Boolean");
@@ -153,22 +153,27 @@ int updatePcTAtribution(){
     int top = PcT.size() - 1;
     int subtop = top - 1;
 
-    if(PcT[top] == "Inteiro" && PcT[subtop] == "Inteiro"){
+    if(PcT[top] == "integer" && PcT[subtop] == "integer"){
         PcT.pop_back();
         PcT.pop_back();
         return 1;
     }
-    else if(PcT[top] == "Inteiro" && PcT[subtop] == "Real"){
+    else if(PcT[top] == "integer" && PcT[subtop] == "real"){
         PcT.pop_back();
         PcT.pop_back();
         return 1;
     }
-    else if(PcT[top] == "Real" && PcT[subtop] == "Real"){
+    else if(PcT[top] == "real" && PcT[subtop] == "real"){
         PcT.pop_back();
         PcT.pop_back();
         return 1;
     }
     else if(PcT[top] == "Boolean" && PcT[subtop] == "Boolean"){
+        PcT.pop_back();
+        PcT.pop_back();
+        return 1;
+    }
+    else if(PcT[top] == "real1" && PcT[subtop] == "real1"){
         PcT.pop_back();
         PcT.pop_back();
         return 1;
@@ -737,6 +742,7 @@ int tipo(){
         currentToken.symbol == "real" ||
         currentToken.symbol == "real1" ||
         currentToken.symbol == "boolean"){
+        setTypeOfidentifiers();
         return 1;
     }
     else{
@@ -750,6 +756,7 @@ int listaDeIdentificadores_(){
         getSymbol();
         if(currentToken.TokenType == "Identificador"){
             declareSymbol();
+            addIdentifier();
             return listaDeIdentificadores_();
         }
         else{
@@ -766,6 +773,7 @@ int listaDeIdentificadores(){
     getSymbol();
     if(currentToken.TokenType == "Identificador"){
         declareSymbol();
+        addIdentifier();
         return listaDeIdentificadores_();
     }
     else{
