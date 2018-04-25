@@ -47,15 +47,15 @@ int opMultiplicativo();
 int opAditivo();
 int opRelacional();
 
-void addIdentifier(string identifierName){
+void addIdentifier(){
     IdentifierAndType duo;
-    duo.identifier = identifierName;
+    duo.identifier = currentToken.symbol;
     duo.type = "unset";                     //identificador está "marcado"
 
     identifierList.push_back(duo);
 }
 
-void setTypeOfidentifiers(string typeName){
+void setTypeOfidentifiers(){
     int lastIdentifier = identifierList.size();
 
     for(int i = lastIdentifier; i >= 0; --i){
@@ -63,7 +63,7 @@ void setTypeOfidentifiers(string typeName){
             break;
         }
         else{
-            identifierList[i].type = typeName;
+            identifierList[i].type = currentToken.TokenType;
         }
     }
 }
@@ -72,28 +72,28 @@ int updatePcTArithmetic(){
     int top = PcT.size() - 1;
     int subtop = top - 1;
 
-    if(PcT[top] == "inteiro" && PcT[subtop] == "inteiro"){
+    if(PcT[top] == "Inteiro" && PcT[subtop] == "Inteiro"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("inteiro");
+        PcT.push_back("Inteiro");
         return 1;
     }
-    else if(PcT[top] == "inteiro" && PcT[subtop] == "real"){
+    else if(PcT[top] == "Inteiro" && PcT[subtop] == "Real"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("real");
+        PcT.push_back("Real");
         return 1;
     }
-    else if(PcT[top] == "real" && PcT[subtop] == "inteiro"){
+    else if(PcT[top] == "Real" && PcT[subtop] == "Inteiro"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("real");
+        PcT.push_back("Real");
         return 1;
     }
-    else if(PcT[top] == "real" && PcT[subtop] == "real"){
+    else if(PcT[top] == "Real" && PcT[subtop] == "Real"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("real");
+        PcT.push_back("Real");
         return 1;
     }
     else{
@@ -105,10 +105,10 @@ int updatePcTBoolean(){
     int top = PcT.size() - 1;
     int subtop = top - 1;
 
-    if(PcT[top] == "boolean" && PcT[subtop] == "boolean"){
+    if(PcT[top] == "Boolean" && PcT[subtop] == "Boolean"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("boolean");
+        PcT.push_back("Boolean");
         return 1;
     }
     else{
@@ -120,28 +120,28 @@ int updatePcTRelational(){
     int top = PcT.size() - 1;
     int subtop = top - 1;
 
-    if(PcT[top] == "inteiro" && PcT[subtop] == "inteiro"){
+    if(PcT[top] == "Inteiro" && PcT[subtop] == "Inteiro"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("boolean");
+        PcT.push_back("Boolean");
         return 1;
     }
-    else if(PcT[top] == "inteiro" && PcT[subtop] == "real"){
+    else if(PcT[top] == "Inteiro" && PcT[subtop] == "Real"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("boolean");
+        PcT.push_back("Boolean");
         return 1;
     }
-    else if(PcT[top] == "real" && PcT[subtop] == "inteiro"){
+    else if(PcT[top] == "Real" && PcT[subtop] == "Inteiro"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("boolean");
+        PcT.push_back("Boolean");
         return 1;
     }
-    else if(PcT[top] == "real" && PcT[subtop] == "real"){
+    else if(PcT[top] == "Real" && PcT[subtop] == "Real"){
         PcT.pop_back();
         PcT.pop_back();
-        PcT.push_back("boolean");
+        PcT.push_back("Boolean");
         return 1;
     }
     else{
@@ -153,28 +153,28 @@ int updatePcTAtribution(){
     int top = PcT.size() - 1;
     int subtop = top - 1;
 
-    if(PcT[top] == "inteiro" && PcT[subtop] == "inteiro"){
+    if(PcT[top] == "Inteiro" && PcT[subtop] == "Inteiro"){
         PcT.pop_back();
-        PcT.pop_back();        
+        PcT.pop_back();
         return 1;
     }
-    else if(PcT[top] == "inteiro" && PcT[subtop] == "real"){
+    else if(PcT[top] == "Inteiro" && PcT[subtop] == "Real"){
         PcT.pop_back();
-        PcT.pop_back();        
-        return 1;
-    }   
-    else if(PcT[top] == "real" && PcT[subtop] == "real"){
         PcT.pop_back();
-        PcT.pop_back();        
         return 1;
     }
-    else if(PcT[top] == "boolean" && PcT[subtop] == "boolean"){
+    else if(PcT[top] == "Real" && PcT[subtop] == "Real"){
         PcT.pop_back();
-        PcT.pop_back();        
+        PcT.pop_back();
+        return 1;
+    }
+    else if(PcT[top] == "Boolean" && PcT[subtop] == "Boolean"){
+        PcT.pop_back();
+        PcT.pop_back();
         return 1;
     }
     else{
-        cout << "Type mismatch\n" << endl;
+        cout << "ERROR: Type mismatch\n" << endl;
         return 0;
     }
 }
