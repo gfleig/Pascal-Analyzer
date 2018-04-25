@@ -205,7 +205,7 @@ int updatePcTAtribution(){
 }
 
 string getIdentifierType(string identifierName){
-    for(int i = 0; i < identifierList.size(); ++i){
+    for(int i = identifierList.size(); i >= 0; --i){
         if(identifierList[i].identifier == identifierName){
             return identifierList[i].identifier;
         }
@@ -699,6 +699,8 @@ int declaracaoDeSubprograma(){
         getSymbol();
         if(currentToken.TokenType == "Identificador"){
             declareSymbol();
+            addIdentifier();
+            setTypeOfidentifiers();
             if(argumentos()){
                 getSymbol();
                 if(currentToken.symbol == ";"){
