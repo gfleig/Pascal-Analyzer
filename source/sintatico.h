@@ -121,19 +121,16 @@ void setTypeOfidentifiers(){
             break;
         }
         else{
-            if(currentToken.TokenType == "Palavra Chave"){
+            if(currentToken.symbol == "integer")
+                symbolTable[i].type = "Inteiro";
+            else if(currentToken.symbol == "real")
+                symbolTable[i].type = "Real";
+            else if (currentToken.symbol == "real1")
+                symbolTable[i].type == "Real 1";
+            else if(currentToken.symbol == "Boolean")
+                symbolTable[i].type = "Boolean";
+            else
                 symbolTable[i].type = "program";
-            }
-            else{
-                if(currentToken.symbol == "integer")
-                    symbolTable[i].type = "Inteiro";
-                else if(currentToken.symbol == "real")
-                    symbolTable[i].type = "Real";
-                else if (currentToken.symbol == "real1")
-                    symbolTable[i].type == "Real 1";
-                else if(currentToken.symbol == "Boolean")
-                    symbolTable[i].type = "Boolean";
-            }
         }
     }
 }
@@ -370,7 +367,6 @@ int termo_(){
     if(opMultiplicativo()){
         if(fator()){
             if(termo_()){
-                updatePcTArithmetic();
                 return 1;
             }
             else{
@@ -394,7 +390,6 @@ int expressaoSimples_(){
     if(opAditivo()){
         if(termo()){
             if(expressaoSimples_()){
-                updatePcTArithmetic();
                 return 1;
             }
             else{
