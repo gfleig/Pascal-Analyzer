@@ -49,8 +49,8 @@ int opRelacional();
 //inicializa a tabela de símbolos. o MARK é $.
 void initializeTable(){
     IdentifierAndType duo;
-    duo.identifier == "$";
-    duo.type == "mark";
+    duo.identifier = "$";
+    duo.type = "mark";
     symbolTable.push_back(duo);
 }
 
@@ -72,7 +72,7 @@ void callSymbol(){
 void declareSymbol(){
     IdentifierAndType duo;
     duo.identifier = currentToken.symbol;
-    duo.identifier = "unset";
+    duo.type = "unset";
 
     for(int i = symbolTable.size() - 1; i >= 0; --i){
         if(symbolTable[i].identifier == "$"){
@@ -86,12 +86,24 @@ void declareSymbol(){
     }
 }
 
+void toString(){
+    for(int i = symbolTable.size() - 1; i >= 0; --i){
+        cout << "Simbolo: " << symbolTable[i].identifier << "Tipo: " << symbolTable[i].type  << endl;
+    }
+}
+
+void toStringPCT(){
+    for(int i = PcT.size() - 1; i >= 0; --i){
+        cout << "Tipo: " << PcT[i] << endl;
+    }
+}
+
 //coloca um MARK pra sinalizar novo escopo
 void enterScope(){
     //symbolTable.push_back("$");
     IdentifierAndType duo;
-    duo.identifier == "$";
-    duo.type == "mark";
+    duo.identifier = "$";
+    duo.type = "mark";
     symbolTable.push_back(duo);
 }
 
@@ -133,7 +145,7 @@ string getIdentifierType(){
         }
     }
     cout << "No identifier with such name found" << endl;
-    return NULL;
+    return " ";
 }
 
 void updatePcTArithmetic(){
@@ -203,6 +215,7 @@ void updatePcTRelational(){
 }
 
 void updatePcTAtribution(){
+    toString();
     int top = PcT.size() - 1;
     int subtop = top - 1;
 
@@ -357,6 +370,7 @@ int termo_(){
     if(opMultiplicativo()){
         if(fator()){
             if(termo_()){
+                updatePcTArithmetic();
                 return 1;
             }
             else{
@@ -380,6 +394,7 @@ int expressaoSimples_(){
     if(opAditivo()){
         if(termo()){
             if(expressaoSimples_()){
+                updatePcTArithmetic();
                 return 1;
             }
             else{
@@ -466,6 +481,7 @@ int variavel(){
     getSymbol();
     if(currentToken.TokenType == "Identificador"){
         callSymbol();
+        PcT.push_back(getIdentifierType());
         return 1;
     }
     else{
@@ -489,7 +505,6 @@ int comando(){
     if(variavel()){
         getSymbol();
         if(currentToken.TokenType == "Atribuição"){
-            PcT.push_back(getIdentifierType());
             return expressao();
         }
         else if (ativacaoDeProcedimento()){
@@ -845,6 +860,7 @@ int programa(){
     cout << "Simbolos na tabela: " << tokenList.size() << endl;
 
     initializeTable();
+
     getSymbol();
     if( currentToken.symbol == "program"){
         getSymbol();
