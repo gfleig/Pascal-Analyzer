@@ -3,7 +3,6 @@ unsigned int currentIndex = 0;
 
 string errorMessage;
 
-//vector<string> symbolTable;
 vector<string> PcT;
 
 struct IdentifierAndType{
@@ -46,175 +45,6 @@ int sinal();
 int opMultiplicativo();
 int opAditivo();
 int opRelacional();
-
-/*
-void initializeIdentifierList(){
-    IdentifierAndType duo;
-    duo.identifier == "$";
-    duo.type == "mark";
-    identifierList.push_back(duo);
-}
-
-void addIdentifier(){
-    IdentifierAndType duo;
-    duo.identifier = currentToken.symbol;
-    duo.type = "unset";                     //identificador está "marcado"
-
-    for(int i = identifierList.size(); i >= 0; --i){
-        if(identifierList[i].identifier == "$"){
-            identifierList.push_back(duo);
-            break;
-        }
-        else if(identifierList[i].identifier == duo.identifier){
-            break;
-        }
-    }
-
-    identifierList.push_back(duo);
-}
-*/
-
-void setTypeOfidentifiers(){
-    int lastIdentifier = symbolTable.size();
-
-    for(int i = lastIdentifier; i >= 0; --i){
-        if(symbolTable[i].type != "unset"){
-            break;
-        }
-        else{
-            if(currentToken.TokenType == "Palavra Chave")
-              symbolTable[i].type = "program";
-            else
-              symbolTable[i].type = currentToken.symbol;
-        }
-    }
-}
-
-int updatePcTArithmetic(){
-    int top = PcT.size() - 1;
-    int subtop = top - 1;
-
-    if(PcT[top] == "integer" && PcT[subtop] == "integer"){
-        PcT.pop_back();
-        PcT.pop_back();
-        PcT.push_back("integer");
-        return 1;
-    }
-    else if(PcT[top] == "integer" && PcT[subtop] == "real"){
-        PcT.pop_back();
-        PcT.pop_back();
-        PcT.push_back("real");
-        return 1;
-    }
-    else if(PcT[top] == "real" && PcT[subtop] == "integer"){
-        PcT.pop_back();
-        PcT.pop_back();
-        PcT.push_back("real");
-        return 1;
-    }
-    else if(PcT[top] == "real" && PcT[subtop] == "real"){
-        PcT.pop_back();
-        PcT.pop_back();
-        PcT.push_back("real");
-        return 1;
-    }
-    else{
-        return 0;
-    }
-}
-
-int updatePcTBoolean(){
-    int top = PcT.size() - 1;
-    int subtop = top - 1;
-
-    if(PcT[top] == "Boolean" && PcT[subtop] == "Boolean"){
-        PcT.pop_back();
-        PcT.pop_back();
-        PcT.push_back("Boolean");
-        return 1;
-    }
-    else{
-        return 0;
-    }
-}
-
-int updatePcTRelational(){
-    int top = PcT.size() - 1;
-    int subtop = top - 1;
-
-    if(PcT[top] == "integer" && PcT[subtop] == "integer"){
-        PcT.pop_back();
-        PcT.pop_back();
-        PcT.push_back("Boolean");
-        return 1;
-    }
-    else if(PcT[top] == "integer" && PcT[subtop] == "real"){
-        PcT.pop_back();
-        PcT.pop_back();
-        PcT.push_back("Boolean");
-        return 1;
-    }
-    else if(PcT[top] == "real" && PcT[subtop] == "integer"){
-        PcT.pop_back();
-        PcT.pop_back();
-        PcT.push_back("Boolean");
-        return 1;
-    }
-    else if(PcT[top] == "real" && PcT[subtop] == "real"){
-        PcT.pop_back();
-        PcT.pop_back();
-        PcT.push_back("Boolean");
-        return 1;
-    }
-    else{
-        return 0;
-    }
-}
-
-int updatePcTAtribution(){
-    int top = PcT.size() - 1;
-    int subtop = top - 1;
-
-    if(PcT[top] == "integer" && PcT[subtop] == "integer"){
-        PcT.pop_back();
-        PcT.pop_back();
-        return 1;
-    }
-    else if(PcT[top] == "integer" && PcT[subtop] == "real"){
-        PcT.pop_back();
-        PcT.pop_back();
-        return 1;
-    }
-    else if(PcT[top] == "real" && PcT[subtop] == "real"){
-        PcT.pop_back();
-        PcT.pop_back();
-        return 1;
-    }
-    else if(PcT[top] == "Boolean" && PcT[subtop] == "Boolean"){
-        PcT.pop_back();
-        PcT.pop_back();
-        return 1;
-    }
-    else if(PcT[top] == "real1" && PcT[subtop] == "real1"){
-        PcT.pop_back();
-        PcT.pop_back();
-        return 1;
-    }
-    else{
-        cout << "ERROR: Type mismatch\n" << endl;
-        return 0;
-    }
-}
-
-string getIdentifierType(string identifierName){
-    for(int i = symbolTable.size(); i >= 0; --i){
-        if(symbolTable[i].identifier == identifierName){
-            return symbolTable[i].identifier;
-        }
-    }
-    cout << "No identifier with such name found" << endl;
-    return NULL;
-}
 
 //inicializa a tabela de símbolos. o MARK é $.
 void initializeTable(){
@@ -271,6 +101,123 @@ void exitScope(){
         symbolTable.pop_back();
     }
     symbolTable.pop_back();
+}
+
+void setTypeOfidentifiers(){
+    for(int i = symbolTable.size() - 1; i >= 0; --i){
+        if(symbolTable[i].type != "unset"){
+            break;
+        }
+        else{
+            if(currentToken.TokenType == "Palavra Chave"){
+                symbolTable[i].type = "program";
+            }
+            else{
+                symbolTable[i].type = currentToken.symbol;
+            }
+        }
+    }
+}
+
+string getIdentifierType(){
+    for(int i = symbolTable.size() - 1; i >= 0; --i){
+        if(symbolTable[i].identifier == currentToken.symbol){
+            return symbolTable[i].type;
+        }
+    }
+    cout << "No identifier with such name found" << endl;
+    return NULL;
+}
+
+void updatePcTArithmetic(){
+    int top = PcT.size() - 1;
+    int subtop = top - 1;
+
+    if(PcT[top] == "integer" && PcT[subtop] == "integer"){
+        PcT.pop_back();
+    }
+    else if(PcT[top] == "integer" && PcT[subtop] == "real"){
+        PcT.pop_back();
+    }
+    else if(PcT[top] == "real" && PcT[subtop] == "integer"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("real");
+    }
+    else if(PcT[top] == "real" && PcT[subtop] == "real"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("real");
+    }
+    else{
+        cout << "ERROR: Type mismatch (Arithmetic)\n" << endl;
+    }
+}
+
+void updatePcTBoolean(){
+    int top = PcT.size() - 1;
+    int subtop = top - 1;
+
+    if(PcT[top] == "Boolean" && PcT[subtop] == "Boolean"){
+        PcT.pop_back();
+    }
+    else{
+        cout << "ERROR: Type mismatch (Boolean)\n" << endl;
+    }
+}
+
+void updatePcTRelational(){
+    int top = PcT.size() - 1;
+    int subtop = top - 1;
+
+    if(PcT[top] == "integer" && PcT[subtop] == "integer"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("Boolean");
+    }
+    else if(PcT[top] == "integer" && PcT[subtop] == "real"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("Boolean");
+    }
+    else if(PcT[top] == "real" && PcT[subtop] == "integer"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("Boolean");
+    }
+    else if(PcT[top] == "real" && PcT[subtop] == "real"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("Boolean");
+    }
+    else{
+        cout << "ERROR: Type mismatch (Relational)\n" << endl;
+    }
+}
+
+void updatePcTAtribution(){
+    int top = PcT.size() - 1;
+    int subtop = top - 1;
+
+    if(PcT[top] == "integer" && PcT[subtop] == "integer"){
+        PcT.pop_back();
+        PcT.pop_back();
+    }
+    else if(PcT[top] == "integer" && PcT[subtop] == "real"){
+        PcT.pop_back();
+        PcT.pop_back();
+    }
+    else if(PcT[top] == "real" && PcT[subtop] == "real"){
+        PcT.pop_back();
+        PcT.pop_back();
+    }
+    else if(PcT[top] == "Boolean" && PcT[subtop] == "Boolean"){
+        PcT.pop_back();
+        PcT.pop_back();
+    }
+    else{
+        cout << "ERROR: Type mismatch (Atribution)\n" << endl;
+    }
 }
 
 int erro(string message){
@@ -708,7 +655,6 @@ int declaracaoDeSubprograma(){
         getSymbol();
         if(currentToken.TokenType == "Identificador"){
             declareSymbol();
-            addIdentifier();
             setTypeOfidentifiers();
             if(argumentos()){
                 getSymbol();
@@ -791,7 +737,6 @@ int listaDeIdentificadores_(){
         getSymbol();
         if(currentToken.TokenType == "Identificador"){
             declareSymbol();
-            addIdentifier();
             return listaDeIdentificadores_();
         }
         else{
@@ -808,7 +753,6 @@ int listaDeIdentificadores(){
     getSymbol();
     if(currentToken.TokenType == "Identificador"){
         declareSymbol();
-        addIdentifier();
         return listaDeIdentificadores_();
     }
     else{
@@ -895,7 +839,6 @@ int programa(){
         getSymbol();
         if(currentToken.TokenType == "Identificador"){
             declareSymbol();
-            addIdentifier();
             setTypeOfidentifiers();
             getSymbol();
             if(currentToken.symbol == ";"){
