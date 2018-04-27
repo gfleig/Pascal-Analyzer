@@ -9,7 +9,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/lexico",
+            "program": "${workspaceFolder}/build/analisador",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

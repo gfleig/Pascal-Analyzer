@@ -3,7 +3,7 @@ unsigned int currentIndex = 0;
 
 string errorMessage;
 
-vector<string> PcT;
+std::vector<std::string> PcT;
 
 struct IdentifierAndType{
     string identifier;
@@ -211,8 +211,7 @@ void updatePcTRelational(){
     }
 }
 
-void updatePcTAtribution(){
-    toString();
+void updatePcTAtribution(){    
     int top = PcT.size() - 1;
     int subtop = top - 1;
 
@@ -366,6 +365,7 @@ int fator(){
 int termo_(){
     if(opMultiplicativo()){
         if(fator()){
+            updatePcTArithmetic();                              //////////////////////////////////////////////
             if(termo_()){
                 return 1;
             }
@@ -419,6 +419,7 @@ int expressaoSimples(){
 
 int expressao(){
     if(expressaoSimples()){
+        updatePcTAtribution();                              ///////////////////////////////////////////
         if(opRelacional() && expressaoSimples()){
             return 1;
         }
