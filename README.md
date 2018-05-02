@@ -1,2 +1,2 @@
-# Compliladores-Lexico
-Atividade Prática I - Analisador Léxico
+# Pascal-Analyzer
+Analisadores Léxico, Sintático e Semântico de Pascal.

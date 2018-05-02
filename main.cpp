@@ -1,5 +1,5 @@
-#include "lexico.h"
-#include "sintatico.h"
+#include "lexico.hpp"
+#include "sintatico.hpp"
 
 int main(){
     ifstream program;

@@ -1,11 +1,31 @@
 program PassOrFailSystem;
 
-var    
+var
+    ActualMark : integer;
+    PossibleMark : integer;
+    PercentageMark : real;
     x: integer;
-    y: real;
+
+procedure second;
+
+var
+   ActualMark : integer;
+
+begin
+
+   ActualMark := 10
+
+end;
+
 begin { PassOrFailSystem }
     
-    y := 3.14;
-    x := 2 + 2 + y
+
+    PercentageMark := (ActualMark / PossibleMark) * 100;
+
+    if (5 >= 1) then
+        
+            x := (2 * (25 / 4)) + (2 * 10)
+            
+    { EndIf }
 
 end. { PassOrFailSystem }
