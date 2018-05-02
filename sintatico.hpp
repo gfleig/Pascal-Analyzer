@@ -240,7 +240,7 @@ void updatePcTAtribution(){
     }
 }
 
-int erro(string message){
+/* int erro(string message){
     static int check = 0;
 
     if(!check){
@@ -249,7 +249,13 @@ int erro(string message){
     }
 
     return 0;
+} */
+
+int erro()
+{
+  return 0;
 }
+
 
 void getSymbol(){
     if(currentIndex != tokenList.size()){
@@ -258,6 +264,844 @@ void getSymbol(){
     }
 }
 
+
+int opMultiplicativo()
+{
+    getSymbol();
+    if(currentToken.TokenType == "Op. Multiplicativo")
+    {
+        return 1;
+    }
+    else
+    {
+        --currentIndex;
+        return erro();
+    }
+}
+
+int opAditivo()
+{
+    getSymbol();
+    if(currentToken.TokenType == "Op. Aditivo")
+    {
+        return 1;
+    }
+    else
+    {
+        --currentIndex;
+        return erro();
+    }
+}
+
+int opRelacional()
+{
+    getSymbol();
+    if(currentToken.TokenType == "Op. Relacional")
+    {
+        return 1;
+    }
+    else
+    {
+        --currentIndex;
+        return erro();
+    }
+}
+
+int sinal()
+{
+    getSymbol();
+    if( currentToken.symbol == "+"  ||
+        currentToken.symbol == "-")
+    {
+        return 1;
+    }
+    else
+    {
+        --currentIndex;
+        return erro();
+    }
+}
+
+int fator()
+{
+    getSymbol();
+    if( currentToken.TokenType == "Inteiro" ||
+        currentToken.TokenType == "Real" ||
+        currentToken.TokenType == "Real 1" ||
+        currentToken.symbol == "true" ||
+        currentToken.symbol == "false"
+      )
+    {
+        return 1;
+    }
+    else if (currentToken.TokenType == "Identificador")
+    {
+        getSymbol();
+
+        if (currentToken.symbol == "(")
+        {
+            if(listaDeExpressoes())
+            {
+                getSymbol();
+
+                if (currentToken.symbol == ")")
+                {
+                    return 1;
+                }
+                else
+                {
+                    --currentIndex;
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            --currentIndex;
+            return 1;
+        }
+    }
+    else if (currentToken.symbol == "not")
+    {
+        return fator();
+    }
+    else if (currentToken.symbol == "(")
+    {
+        if (expressao())
+        {
+            getSymbol();
+
+            if (currentToken.symbol == ")")
+            {
+                return 1;
+            }
+            else
+            {
+                --currentIndex;
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        --currentIndex;
+        return erro();
+    }
+}
+
+int termo_()
+{
+    if(opMultiplicativo())
+    {
+        if(fator())
+        {
+            if(termo_())
+            {
+                return 1;
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+int termo()
+{
+    return (fator() && termo_());
+}
+
+int expressaoSimples_()
+{
+    if(opAditivo())
+    {
+        if(termo())
+        {
+            if(expressaoSimples_())
+            {
+                return 1;
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+int expressaoSimples()
+{
+    if(termo() && expressaoSimples_())
+    {
+        return 1;
+    }
+    else if(sinal() && termo() && expressaoSimples_())
+    {
+        return 1;
+    }
+    else
+    {
+        return erro();
+    }
+}
+
+int expressao()
+{
+    if(expressaoSimples())
+    {
+        if(opRelacional() && expressaoSimples())
+        {
+            return 1;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+    else
+    {
+        return erro();
+    }
+}
+
+int listaDeExpressoes_()
+{
+    getSymbol();
+    if(currentToken.symbol == ",")
+    {
+        if(expressao())
+        {
+            return listaDeExpressoes_();
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
+}
+
+int listaDeExpressoes()
+{
+    return (expressao() && listaDeExpressoes_());
+}
+
+int ativacaoDeProcedimento()
+{
+    if(currentToken.symbol == "(")
+    {
+        if(listaDeExpressoes())
+        {
+            getSymbol();
+            if(currentToken.symbol == ")")
+            {
+                return 1;
+            }
+            else
+            {
+                --currentIndex;
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        return erro();
+    }
+}
+
+int variavel()
+{
+    getSymbol();
+    if(currentToken.TokenType == "Identificador")
+    {
+        return 1;
+    }
+    else
+    {
+        --currentIndex;
+        return erro();
+    }
+}
+
+int parteElse()
+{
+    getSymbol();
+    if(currentToken.symbol == "else")
+    {
+        return comando();
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
+}
+
+int comando()
+{
+    if(variavel())
+    {
+        getSymbol();
+        if(currentToken.TokenType == "Atribuição")
+        {
+            return expressao();
+        }
+        else if (ativacaoDeProcedimento())
+        {
+            return 1;
+        }
+        else
+        {
+            --currentIndex;
+            return erro();
+        }
+    }
+    else if (comandoComposto())
+    {
+        return 1;
+    }
+    else
+    {
+        getSymbol();
+        if(currentToken.symbol == "if")
+        {
+            if(expressao())
+            {
+                getSymbol();
+                if(currentToken.symbol == "then")
+                {
+                    return comando() && parteElse();
+                }
+                else
+                {
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else if (currentToken.symbol == "while")
+        {
+            if(expressao())
+            {
+                getSymbol();
+                if(currentToken.symbol == "do")
+                {
+                    return comando();
+                }
+                else
+                {
+                    --currentIndex;
+                    return erro();
+                }
+            }
+            else
+            {
+                --currentIndex;
+                return erro();
+            }
+        }
+        else
+        {
+            --currentIndex;
+            return erro();
+        }
+    }
+  }
+
+int listaDeComandos_()
+{
+    getSymbol();
+    if(currentToken.symbol == ";")
+    {
+        return comando() && listaDeComandos_();
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
+}
+
+int listaDeComandos()
+{
+    return comando() && listaDeComandos_();
+}
+
+int comandosOpcionais()
+{
+    getSymbol();
+    if(currentToken.symbol == "end")
+    {
+        --currentIndex;
+        return 1;
+    }
+    --currentIndex;
+    return listaDeComandos();
+}
+
+int comandoComposto()
+{
+    getSymbol();
+    if(currentToken.symbol == "begin")
+    {
+        if(comandosOpcionais())
+        {
+            getSymbol();
+            if(currentToken.symbol == "end")
+            {
+                return 1;
+            }
+            else
+            {
+                --currentIndex;
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        --currentIndex;
+        return erro();
+    }
+}
+
+int listaDeParametros_()
+{
+    getSymbol();
+    if(currentToken.symbol == ";")
+    {
+        if(listaDeIdentificadores())
+        {
+            getSymbol();
+            if(currentToken.symbol == ":")
+            {
+                if(tipo())
+                {
+                    return listaDeParametros_();
+                }
+                else
+                {
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
+}
+
+int listaDeParametros()
+{
+    if(listaDeIdentificadores())
+    {
+        getSymbol();
+        if(currentToken.symbol == ":")
+        {
+            if(tipo())
+            {
+                return listaDeParametros_();
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        return erro();
+    }
+}
+
+int argumentos()
+{
+    getSymbol();
+    if(currentToken.symbol == "(")
+    {
+        if(listaDeParametros())
+        {
+            getSymbol();
+            if(currentToken.symbol == ")")
+            {
+                return 1;
+            }
+            else
+            {
+                --currentIndex;
+                return erro();
+            }
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
+}
+
+int declaracaoDeSubprograma()
+{
+    getSymbol();
+    if(currentToken.symbol == "procedure")
+    {
+        getSymbol();
+        if(currentToken.TokenType == "Identificador")
+        {
+            if(argumentos())
+            {
+                getSymbol();
+                if(currentToken.symbol == ";")
+                {
+                    if(declaracoesVariaveis())
+                    {
+                        if(declaracoesDeSubprogramas())
+                        {
+                            if(comandoComposto())
+                            {
+                                return 1;
+                            }
+                            else
+                            {
+                                return erro();
+                            }
+                        }
+                        else
+                        {
+                            return erro();
+                        }
+                    }
+                    else
+                    {
+                        return erro();
+                    }
+                }
+                else
+                {
+                    --currentIndex;
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            --currentIndex;
+            return erro();
+        }
+    }
+    else
+    {
+        --currentIndex;
+        return erro();
+    }
+}
+
+int declaracoesDeSubprogramas_()
+{
+    if(declaracaoDeSubprograma())
+    {
+        getSymbol();
+        if(currentToken.symbol == ";")
+        {
+            return declaracoesDeSubprogramas_();
+        }
+        else
+        {
+            --currentIndex;
+            return erro();
+        }
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+int declaracoesDeSubprogramas()
+{
+    return declaracoesDeSubprogramas_();
+}
+
+int tipo()
+{
+    getSymbol();
+    if( currentToken.symbol == "integer" ||
+        currentToken.symbol == "real" ||
+        currentToken.symbol == "real1" ||
+        currentToken.symbol == "boolean")
+    {
+        return 1;
+    }
+    else
+    {
+        return erro();
+    }
+}
+
+int listaDeIdentificadores_()
+{
+    getSymbol();
+    if(currentToken.symbol == ",")
+    {
+        getSymbol();
+        if(currentToken.TokenType == "Identificador")
+        {
+            return listaDeIdentificadores_();
+        }
+        else
+        {
+            return erro();
+        }
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
+}
+
+int listaDeIdentificadores()
+{
+    getSymbol();
+    if(currentToken.TokenType == "Identificador")
+    {
+        return listaDeIdentificadores_();
+    }
+    else
+    {
+        --currentIndex;
+        return erro();
+    }
+}
+
+int listaDeclaracaoVariaveis_()
+{
+    if(listaDeIdentificadores())
+    {
+        getSymbol();
+        if(currentToken.symbol == ":")
+        {
+            if(tipo())
+            {
+                getSymbol();
+                if(currentToken.symbol == ";")
+                {
+                    return listaDeclaracaoVariaveis_();
+                }
+                else
+                {
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            --currentIndex;
+            return erro();
+        }
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+int listaDeclaracaoVariaveis()
+{
+    if(listaDeIdentificadores())
+    {
+        getSymbol();
+        if(currentToken.symbol == ":")
+        {
+            if(tipo())
+            {
+                getSymbol();
+                if(currentToken.symbol == ";")
+                {
+                    return listaDeclaracaoVariaveis_();
+                }
+                else
+                {
+                    --currentIndex;
+                    return erro();
+                }
+            }
+            else
+            {
+                return erro();
+            }
+        }
+        else
+        {
+            --currentIndex;
+            return erro();
+        }
+    }
+    else
+    {
+        return erro();
+    }
+}
+
+int declaracoesVariaveis()
+{
+    getSymbol();
+    if(currentToken.symbol == "var")
+    {
+        return listaDeclaracaoVariaveis();
+    }
+    else
+    {
+        --currentIndex;
+        return 1;
+    }
+}
+
+int programa()
+{
+
+    cout << "Simbolos na tabela: " << tokenList.size() << endl;
+
+    getSymbol();
+    if( currentToken.symbol == "program")
+    {
+        getSymbol();
+        if(currentToken.TokenType == "Identificador")
+        {
+            getSymbol();
+            if(currentToken.symbol == ";")
+            {
+                if (declaracoesVariaveis())
+                {
+                    if (declaracoesDeSubprogramas())
+                    {
+                        if (comandoComposto())
+                        {
+                            getSymbol();
+
+                            if(currentToken.symbol == ".")
+                            {
+                                cout << "Programa Sintaticamente Correto! " << endl;
+                                return 1;
+                            }
+                            else
+                            {
+                                --currentIndex;
+                                getSymbol();
+                                cout << "ERROR on line " << currentToken.line << endl;
+                                return erro();
+                            }
+                        }
+                        else
+                        {
+                            cout << "ERROR on line " << currentToken.line << endl;
+                            return erro();
+                        }
+                    }
+                    else
+                    {
+                        cout << "ERROR on line " << currentToken.line << endl;
+                        return erro();
+                    }
+                }
+                else
+                {
+                    cout << "ERROR on line " << currentToken.line << endl;
+                    return erro();
+                }
+            }
+            else
+            {
+                cout << "ERROR on line " << currentToken.line << endl;
+                return erro();
+            }
+        }
+        else
+        {
+            cout << "ERROR on line " << currentToken.line << endl;
+            return erro();
+        }
+    }
+    else
+    {
+        cout << "ERROR on line " << currentToken.line << endl;
+        return erro();
+    }
+}
+
+int checkTable()
+{
+    return programa();
+}
+
+/*
 int opMultiplicativo(){
     getSymbol();
     if(currentToken.TokenType == "Op. Multiplicativo"){
@@ -919,3 +1763,4 @@ int checkTable(){
     }
     return returnCode;
 }
+*/

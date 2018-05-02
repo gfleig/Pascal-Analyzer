@@ -5,3 +5,6 @@ analisador:*.cpp
 
 clean:
 	rm analisador
+
+debug:
+	g++ -std=c++14 -Wall -Werror *.cpp -g -o analisador
