@@ -798,6 +798,7 @@ int programa()
                                 --currentIndex;
                                 getSymbol();
                                 cout << "ERROR on line " << currentToken.line << endl;
+                                cout << "Expected '.' before the end of the file" << endl;
                                 return 0;
                             }
                         }
@@ -822,18 +823,21 @@ int programa()
             else
             {
                 cout << "ERROR on line " << currentToken.line << endl;
+                cout << "Expected ';'" << endl;
                 return 0;
             }
         }
         else
         {
             cout << "ERROR on line " << currentToken.line << endl;
+            cout << "Expected a program identifier" << endl;
             return 0;
         }
     }
     else
     {
         cout << "ERROR on line " << currentToken.line << endl;
+        cout << "Expected keyword 'program'" << endl;
         return 0;
     }
 }
