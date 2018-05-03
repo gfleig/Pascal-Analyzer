@@ -40,6 +40,18 @@ int opMultiplicativo();
 int opAditivo();
 int opRelacional();
 
+int erro()
+{
+    static int counter = 0;
+    if(counter == 0)
+    {
+        cout << "ERROR: At line " << currentToken.line <<  " (" << currentToken.symbol << ")" << endl;
+        counter++;
+    }
+
+    return 0;
+}
+
 //inicializa a tabela de símbolos. o MARK é $.
 void initializeTable(){
     symbolTable.push_back("$");
@@ -55,7 +67,7 @@ void callSymbol(){
         }
     }
     if(!aux){
-      cout << "Undeclared identifier on line " << currentToken.line << endl;
+      cout << "Undeclared identifier on line " << currentToken.line <<  " (" << currentToken.symbol << ")" << endl;
     }
 }
 
@@ -67,7 +79,7 @@ void declareSymbol(){
             break;
         }
         else if(symbolTable[i] == currentToken.symbol){
-            cout << "Already declared identifier on line " << currentToken.line << endl;
+            cout << "Already declared identifier on line " << currentToken.line <<  " (" << currentToken.symbol << ")" << endl;
             break;
         }
     }
@@ -86,18 +98,6 @@ void exitScope(){
     symbolTable.pop_back();
 }
 
-int warning(string message){
-    cout << "Warning: at line " << currentToken.line << ": " << message << ". Continuing..." << endl;
-
-    return 0;
-}
-
-int erro(string message){
-    cout << "At line " << currentToken.line << ": " << message << endl;
-
-    exit(0);
-}
-
 void getSymbol(){
     if(currentIndex != tokenList.size()){
       currentToken = tokenList[currentIndex];
@@ -112,7 +112,7 @@ int opMultiplicativo(){
     }
     else{
         --currentIndex;
-        return warning("Expected multiplication operator('*', '/', or 'and')");
+        return 0;
     }
 }
 
@@ -123,7 +123,7 @@ int opAditivo(){
     }
     else{
         --currentIndex;
-        return warning("Expected addition operator('+', '-', or 'or')");
+        return 0;
     }
 }
 
@@ -134,7 +134,7 @@ int opRelacional(){
     }
     else{
         --currentIndex;
-        return warning("Expected relational operator('>', '<', '>=', '<=', or '=')");
+        return 0;
     }
 }
 
@@ -146,7 +146,7 @@ int sinal(){
     }
     else{
         --currentIndex;
-        return erro("Expected '+' or '-'");
+        return erro();
     }
 }
 
@@ -171,11 +171,11 @@ int fator(){
                 }
                 else{
                     --currentIndex;
-                    return erro("Expected closing parentheses ')'");
+                    return erro();
                 }
             }
             else{
-                return erro("Expected 'listaDeExpressoes'");
+                return erro();
             }
         }
         else{
@@ -195,16 +195,16 @@ int fator(){
             }
             else{
                 --currentIndex;
-                return erro("Expected closing parentheses ')'");
+                return erro();
             }
         }
         else{
-            return erro("Expected 'expressao'");
+            return erro();
         }
     }
     else{
         --currentIndex;
-        return erro("Expected opening parentheses '('");
+        return erro();
     }
 }
 
@@ -215,11 +215,11 @@ int termo_(){
                 return 1;
             }
             else{
-                return erro("Expected 'termo_'");
+                return erro();
             }
         }
         else{
-            return erro("Expected 'fator'");
+            return erro();
         }
     }
     else{
@@ -238,11 +238,11 @@ int expressaoSimples_(){
                 return 1;
             }
             else{
-                return erro("Expected 'expressaoSimples_'");
+                return erro();
             }
         }
         else{
-            return erro("Expected termo");
+            return erro();
         }
     }
     else{
@@ -258,7 +258,7 @@ int expressaoSimples(){
         return 1;
     }
     else{
-        return erro("During 'expressaoSimples': no valid pattern detected");
+        return erro();
     }
 }
 
@@ -272,7 +272,7 @@ int expressao(){
         }
     }
     else{
-        return erro("Expected expressaoSimples");
+        return erro();
     }
 }
 
@@ -283,7 +283,7 @@ int listaDeExpressoes_(){
             return listaDeExpressoes_();
         }
         else{
-            return erro("Expected 'expressao'");
+            return erro();
         }
     }
     else{
@@ -305,15 +305,15 @@ int ativacaoDeProcedimento(){
             }
             else{
                 --currentIndex;
-                return erro("Expected closing parentheses ')'");
+                return erro();
             }
         }
         else{
-            return erro("Expected 'listaDeExpressoes'");
+            return erro();
         }
     }
     else{
-        return erro("Expected opening parentheses '('");
+        return erro();
     }
 }
 
@@ -325,7 +325,7 @@ int variavel(){
     }
     else{
         --currentIndex;
-        return erro("Expected identifier token");
+        return 0;
     }
 }
 
@@ -351,11 +351,8 @@ int comando(){
         }
         else{
             --currentIndex;
-            return erro("In 'comando': no valid pattern detected");
+            return erro();
         }
-    }
-    else if (comandoComposto()){
-        return 1;
     }
     else{
         getSymbol();
@@ -366,11 +363,12 @@ int comando(){
                     return comando() && parteElse();
                 }
                 else{
-                    return erro("Expected 'then'");
+                    --currentIndex;
+                    return erro();
                 }
             }
             else{
-                return erro("Expected 'expressao'");
+                return erro();
             }
         }
         else if (currentToken.symbol == "while"){
@@ -381,17 +379,20 @@ int comando(){
                 }
                 else{
                     --currentIndex;
-                    return erro("Expected 'do'");
+                    return erro();
                 }
             }
             else{
                 --currentIndex;
-                return erro("Expected 'epressao'");
+                return erro();
             }
         }
         else{
             --currentIndex;
-            return erro("Expected 'while'");
+            if (comandoComposto()){
+                return 1;
+            }
+            return erro();
         }
     }
   }
@@ -431,16 +432,16 @@ int comandoComposto(){
             }
             else{
                 --currentIndex;
-                return erro("Expected 'end'");
+                return erro();
             }
         }
         else{
-            return erro("Expected 'comandosOpcionais'");
+            return erro();
         }
     }
     else{
         --currentIndex;
-        return erro("Expected 'begin'");
+        return erro();
     }
 }
 
@@ -455,15 +456,15 @@ int listaDeParametros_(){
                     return listaDeParametros_();
                 }
                 else{
-                    return erro("Expected 'tipo'");
+                    return erro();
                 }
             }
             else{
-                return erro("Expected ':'");
+                return erro();
             }
         }
         else{
-            return erro("Expected 'listaDeIdentificadores'");
+            return erro();
         }
     }
     else{
@@ -480,15 +481,15 @@ int listaDeParametros(){
                 return listaDeParametros_();
             }
             else{
-                return erro("Expected 'tipo'");
+                return erro();
             }
         }
         else{
-            return erro("Expected ':'");
+            return erro();
         }
     }
     else{
-        return erro("Expected 'listaDeIdentificadores'");
+        return erro();
     }
 }
 
@@ -502,11 +503,11 @@ int argumentos(){
             }
             else{
                 --currentIndex;
-                return erro("Expected closing parentheses ')'");
+                return erro();
             }
         }
         else{
-            return erro("Expected 'listaDeParametros'");
+            return erro();
         }
     }
     else{
@@ -532,34 +533,34 @@ int declaracaoDeSubprograma(){
                                 return 1;
                             }
                             else{
-                                return erro("Expected 'comandoComposto'");
+                                return erro();
                             }
                         }
                         else{
-                            return erro("Expected 'declaracoesDeSubprogramas'");
+                            return erro();
                         }
                     }
                     else{
-                        return erro("Expected 'declaracoesVariaveis'");
+                        return erro();
                     }
                 }
                 else{
                     --currentIndex;
-                    return erro("Expected ;");
+                    return erro();
                 }
             }
             else{
-                return erro("Expected 'argumentos'");
+                return erro();
             }
         }
         else{
             --currentIndex;
-            return erro("Expected identifier token");
+            return erro();
         }
     }
     else{
         --currentIndex;
-        return warning("Expected keyword 'procedure'");
+        return 0;
     }
 }
 
@@ -571,7 +572,7 @@ int declaracoesDeSubprogramas_(){
         }
         else{
             --currentIndex;
-            return erro("Expected ';'");
+            return erro();
         }
     }
     else{
@@ -588,11 +589,11 @@ int tipo(){
     if( currentToken.symbol == "integer" ||
         currentToken.symbol == "real" ||
         currentToken.symbol == "real1" ||
-        currentToken.symbol == "boolean"){
+        currentToken.symbol == "Boolean"){
         return 1;
     }
     else{
-        return erro("Expected 'integer', 'real', 'real1', or 'boolean'");
+        return erro();
     }
 }
 
@@ -605,7 +606,7 @@ int listaDeIdentificadores_(){
             return listaDeIdentificadores_();
         }
         else{
-            return warning("Expected identifier token");
+            return 0;
         }
     }
     else{
@@ -622,7 +623,7 @@ int listaDeIdentificadores(){
     }
     else{
         --currentIndex;
-        return warning("Expected identifier token");
+        return 0;
     }
 }
 
@@ -636,16 +637,16 @@ int listaDeclaracaoVariaveis_(){
                     return listaDeclaracaoVariaveis_();
                 }
                 else{
-                    return erro("Expected ';'");
+                    return erro();
                 }
             }
             else{
-                return erro("Expected 'tipo'");
+                return erro();
             }
         }
         else{
             --currentIndex;
-            return erro("Expected ':'");
+            return erro();
         }
     }
     else{
@@ -664,20 +665,20 @@ int listaDeclaracaoVariaveis(){
                 }
                 else{
                     --currentIndex;
-                    return erro("Expected ';'");
+                    return erro();
                 }
             }
             else{
-                return erro("Expected 'tipo'");
+                return erro();
             }
         }
         else{
             --currentIndex;
-            return erro("Expected ':'");
+            return erro();
         }
     }
     else{
-        return erro("Expected 'listaDeIdentificadores'");
+        return erro();
     }
 }
 
@@ -693,8 +694,6 @@ int declaracoesVariaveis(){
 }
 
 int programa(){
-
-    cout << "Simbolos na tabela: " << tokenList.size() << endl;
 
     initializeTable();
 
@@ -717,45 +716,35 @@ int programa(){
                             else{
                                 --currentIndex;
                                 getSymbol();
-                                cout << "ERROR on line " << errorLine << endl;
-                                return erro("Expected '.' at the end of the program");
+                                return erro();
                             }
                         }
                         else{
-                            //cout << "ERROR on line " << errorLine << endl;
                             return 0;
                         }
                     }
                     else{
-                        //cout << "ERROR on line " << errorLine << endl;
                         return 0;
                     }
                 }
                 else{
-                    //cout << "ERROR on line " << errorLine << endl;
                     return 0;
                 }
             }
             else{
-                //cout << "ERROR on line " << errorLine << endl;
-                return erro("Expected ';' after program identifier");
+                return erro();
             }
         }
         else{
-            //cout << "ERROR on line " << errorLine << endl;
-            return erro("Expected identifier after keyword 'program'");
+            return erro();
         }
     }
     else{
-        //cout << "ERROR on line " << errorLine << endl;
-        return erro("Expected keyword 'program' at the start");
+        return erro();
     }
 }
 
 int checkTable(){
-    int returnCode = programa();
-    if(!returnCode){
-        cout << errorMessage << endl;
-    }
-    return returnCode;
+
+    return programa();
 }

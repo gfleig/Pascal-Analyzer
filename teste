@@ -1,13 +1,32 @@
-program epic;
+program PassOrFailSystem;
 
 var
-    y: real;
+    ActualMark : integer;
+    PossibleMark : integer;
+    PercentageMark : real;
     x: integer;
-begin    
 
-    x := 10;
+procedure second;
 
-    if (x >= 5) then        
-        x := (2 * (25 / 4)) + (2 * 10)  
+var
 
-end. 
+   ActualMark : integer;
+
+begin
+
+   ActualMark := 10
+
+end;
+
+begin { PassOrFailSystem }
+
+
+    PercentageMark := (ActualMark / PossibleMark) * 100;
+
+    if (5 >= 1) then
+
+            x := 2
+
+    { EndIf }
+
+end. { PassOrFailSystem }

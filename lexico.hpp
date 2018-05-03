@@ -295,7 +295,7 @@ void comentario(Token& token, ifstream& program, char& character){
   return;
 }
 
-void createTable(ifstream& program){
+int createTable(ifstream& program){
   character = program.get();          //pega o primeiro caractere; os proximos vão ser pegos dentro das funções
 
   while(!program.eof()){             //enquanto ainda tiver programa a ser lido
@@ -347,17 +347,21 @@ void createTable(ifstream& program){
   }
 
   if (errorID == 0){
+
+      cout << "Simbolos na tabela: " << tokenList.size() << endl;
+
       for(unsigned int i = 0; i < tokenList.size(); ++i){      //imprime tokens, seus tipos
           cout << tokenList[i].line << "\t"<< tokenList[i].symbol << "\t\t" << tokenList[i].TokenType << endl;
       }
-      return;
+      return 1;
   }
   else if (errorID == 1){
       cout << "ERROR: Unkown Symbol on line " << currentLine << endl;
-      return;
+      return 0;
   }
   else if (errorID == 2){
       cout << "ERROR: Unclosed Comment" << endl;
-      return;
+      return 0;
   }
+  return 0;
 }

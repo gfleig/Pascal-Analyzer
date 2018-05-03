@@ -5,8 +5,10 @@ int main(){
     ifstream program;
     program.open("teste");
 
-    createTable(program);
-    checkTable();
+    int lex = createTable(program);
+
+    if (lex)
+      checkTable();
 
     return 0;
 }
