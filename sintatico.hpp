@@ -198,6 +198,7 @@ int callSymbol(){
     }
     if(!aux){
       cout << "Undeclared identifier on line " << currentToken.line <<  " (" << currentToken.symbol << ")" << endl;
+      errorPcT++;
       return 0;
     }
     return 1;
@@ -216,6 +217,7 @@ void declareSymbol(){
         }
         else if(symbolTable[i].identifier == currentToken.symbol){
             cout << "Already declared identifier on line " << currentToken.line <<  " (" << currentToken.symbol << ")" << endl;
+            errorPcT++;
             break;
         }
     }
@@ -262,7 +264,6 @@ string getIdentifierType(Token currentToken){
             return symbolTable[i].type;
         }
     }
-    cout << "No identifier with such name found" <<  " (" << currentToken.symbol << ")" << endl;
     return " ";
 }
 
