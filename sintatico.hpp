@@ -1,7 +1,12 @@
 Token currentToken;
 unsigned int currentIndex = 0;
 
-vector<string> symbolTable;
+struct IdentifierAndType{
+    string identifier;
+    string type;
+};
+
+vector<IdentifierAndType> symbolTable;
 
 int programa();
 int declaracoesVariaveis();
@@ -51,14 +56,17 @@ int erro()
 
 //inicializa a tabela de símbolos. o MARK é $.
 void initializeTable(){
-    symbolTable.push_back("$");
+    IdentifierAndType duo;
+    duo.identifier = "$";
+    duo.type = "mark";
+    symbolTable.push_back(duo);
 }
 
 //checa se existe um ident. com esse nome
 void callSymbol(){
     int aux = 0;
     for(int i = symbolTable.size() - 1; i > 0; --i){
-        if(symbolTable[i] == currentToken.symbol){
+        if(symbolTable[i].identifier == currentToken.symbol){
             aux++;
             break;
         }
@@ -70,12 +78,16 @@ void callSymbol(){
 
 //checa até o primeiro MARK se já tem alguma var com o memso nome
 void declareSymbol(){
+    IdentifierAndType duo;
+    duo.identifier = currentToken.symbol;
+    duo.type = "unset";
+
     for(int i = symbolTable.size() - 1; i >= 0; --i){
-        if(symbolTable[i] == "$"){
-            symbolTable.push_back(currentToken.symbol);
+        if(symbolTable[i].identifier == "$"){
+            symbolTable.push_back(duo);
             break;
         }
-        else if(symbolTable[i] == currentToken.symbol){
+        else if(symbolTable[i].identifier == currentToken.symbol){
             cout << "Already declared identifier on line " << currentToken.line <<  " (" << currentToken.symbol << ")" << endl;
             break;
         }
@@ -84,15 +96,47 @@ void declareSymbol(){
 
 //coloca um MARK pra sinalizar novo escopo
 void enterScope(){
-    symbolTable.push_back("$");
+    //symbolTable.push_back("$");
+    IdentifierAndType duo;
+    duo.identifier = "$";
+    duo.type = "mark";
+    symbolTable.push_back(duo);
 }
 
 //para sair do escopo atual, deleta-se tudo até o primeiro MARK, inclusive o próprio MARK.
 void exitScope(){
-    while(symbolTable.back() != "$"){
+    while(symbolTable.back().identifier != "$"){
         symbolTable.pop_back();
     }
     symbolTable.pop_back();
+}
+
+void setTypeOfidentifiers(){
+    for(int i = symbolTable.size() - 1; i >= 0; --i){
+        if(symbolTable[i].type != "unset"){
+            break;
+        }
+        else{
+            if(currentToken.symbol == "integer")
+                symbolTable[i].type = "Inteiro";
+            else if(currentToken.symbol == "real")
+                symbolTable[i].type = "Real";
+            else if (currentToken.symbol == "real1")
+                symbolTable[i].type == "Real 1";
+            else if(currentToken.symbol == "Boolean")
+                symbolTable[i].type = "Boolean";
+        }
+    }
+}
+
+string getIdentifierType(){
+    for(int i = symbolTable.size() - 1; i >= 0; --i){
+        if(symbolTable[i].identifier == currentToken.symbol){
+            return symbolTable[i].type;
+        }
+    }
+    cout << "No identifier with such name found" <<  " (" << currentToken.symbol << ")" << endl;
+    return " ";
 }
 
 void getSymbol(){
@@ -520,6 +564,7 @@ int declaracaoDeSubprograma(){
         getSymbol();
         if(currentToken.TokenType == "Identificador"){
             declareSymbol();
+            symbolTable.back().type = "procedure";
             if(argumentos()){
                 getSymbol();
                 if(currentToken.symbol == ";"){
@@ -587,6 +632,7 @@ int tipo(){
         currentToken.symbol == "real" ||
         currentToken.symbol == "real1" ||
         currentToken.symbol == "Boolean"){
+        setTypeOfidentifiers();
         return 1;
     }
     else{
@@ -699,6 +745,7 @@ int programa(){
         getSymbol();
         if(currentToken.TokenType == "Identificador"){
             declareSymbol();
+            symbolTable.back().type = "program";
             getSymbol();
             if(currentToken.symbol == ";"){
                 if (declaracoesVariaveis()){
