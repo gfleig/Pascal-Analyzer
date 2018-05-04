@@ -185,6 +185,7 @@ void identificador(Token& token, ifstream& program, char& character){
           ||  (token.symbol == "var")
           ||  (token.symbol == "integer")
           ||  (token.symbol == "real")
+          ||  (token.symbol == "real1")
           ||  (token.symbol == "boolean")
           ||  (token.symbol == "procedure")
           ||  (token.symbol == "begin")

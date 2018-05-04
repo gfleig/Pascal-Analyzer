@@ -46,6 +46,23 @@ int opMultiplicativo();
 int opAditivo();
 int opRelacional();
 
+void updatePcTCondition(){
+    int top = PcT.size() - 1;
+    int subtop = top - 1;
+
+    if(PcT[top] == "Boolean" && PcT[subtop] == "Boolean"){
+        PcT.pop_back();
+        PcT.pop_back();
+    }
+    else{
+        if(!errorPcT){
+            errorPcT++;
+            cout << "ERROR: Type mismatch (Condition) Line: " << tokenList[currentIndex - 1].line << endl;
+        }
+    }
+    PcT.clear();
+}
+
 void updatePcTArithmetic(){
     int top = PcT.size() - 1;
     int subtop = top - 1;
@@ -232,7 +249,7 @@ void setTypeOfidentifiers(){
             else if(currentToken.symbol == "real")
                 symbolTable[i].type = "Real";
             else if (currentToken.symbol == "real1")
-                symbolTable[i].type == "Real 1";
+                symbolTable[i].type = "Real 1";
             else if(currentToken.symbol == "Boolean")
                 symbolTable[i].type = "Boolean";
         }
@@ -525,7 +542,9 @@ int comando(){
     else{
         getSymbol();
         if(currentToken.symbol == "if"){
+            PcT.push_back("Boolean");
             if(expressao()){
+                updatePcTCondition();
                 getSymbol();
                 if(currentToken.symbol == "then"){
                     return comando() && parteElse();
@@ -540,7 +559,9 @@ int comando(){
             }
         }
         else if (currentToken.symbol == "while"){
+            PcT.push_back("Boolean");
             if(expressao()){
+                updatePcTCondition();
                 getSymbol();
                 if(currentToken.symbol == "do"){
                     return comando();

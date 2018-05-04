@@ -10,11 +10,11 @@ procedure second;
 
 var
 
-   ActualMark : integer;
+   ActualMark : real1;
 
 begin
 
-   ActualMark := 10
+   ActualMark := +23e-10
 
 end;
 
