@@ -6,6 +6,9 @@ struct IdentifierAndType{
     string type;
 };
 
+int errorPcT = 0;
+
+vector<string> PcT;
 vector<IdentifierAndType> symbolTable;
 
 int programa();
@@ -42,6 +45,98 @@ int opMultiplicativo();
 int opAditivo();
 int opRelacional();
 
+void updatePcTArithmetic(){
+    int top = PcT.size() - 1;
+    int subtop = top - 1;
+
+    if(PcT[top] == "Inteiro" && PcT[subtop] == "Inteiro"){
+        PcT.pop_back();
+    }
+    else if(PcT[top] == "Inteiro" && PcT[subtop] == "Real"){
+        PcT.pop_back();
+    }
+    else if(PcT[top] == "Real" && PcT[subtop] == "Inteiro"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("Real");
+    }
+    else if(PcT[top] == "Real" && PcT[subtop] == "Real"){
+        PcT.pop_back();
+    }
+    else{
+        if(!errorPcT){
+            errorPcT++;
+            cout << "ERROR: Type mismatch (Arithmetic) Line: " << currentToken.line << endl;
+        }
+    }
+}
+
+void updatePcTRelational(){
+    int top = PcT.size() - 1;
+    int subtop = top - 1;
+
+    if(PcT[top] == "Inteiro" && PcT[subtop] == "Inteiro"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("Boolean");
+    }
+    else if(PcT[top] == "Inteiro" && PcT[subtop] == "Real"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("Boolean");
+    }
+    else if(PcT[top] == "Real" && PcT[subtop] == "Inteiro"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("Boolean");
+    }
+    else if(PcT[top] == "Real" && PcT[subtop] == "Real"){
+        PcT.pop_back();
+        PcT.pop_back();
+        PcT.push_back("Boolean");
+    }
+    else{
+        if(!errorPcT){
+            errorPcT++;
+            cout << "ERROR: Type mismatch (Relational) Line: " << currentToken.line << endl;
+        }
+    }
+}
+
+void updatePcTAtribution(){
+
+    int top = PcT.size() - 1;
+    int subtop = top - 1;
+
+    if(PcT[top] == "Inteiro" && PcT[subtop] == "Inteiro"){
+        PcT.pop_back();
+        PcT.pop_back();
+    }
+    else if(PcT[top] == "Inteiro" && PcT[subtop] == "Real"){
+        PcT.pop_back();
+        PcT.pop_back();
+    }
+    else if(PcT[top] == "Real" && PcT[subtop] == "Real"){
+        PcT.pop_back();
+        PcT.pop_back();
+    }
+    else if(PcT[top] == "Boolean" && PcT[subtop] == "Boolean"){
+        PcT.pop_back();
+        PcT.pop_back();
+    }
+    else if(PcT[top] == "Real 1" && PcT[subtop] == "Real 1"){
+        PcT.pop_back();
+        PcT.pop_back();
+    }
+    else{
+        if(!errorPcT){
+            errorPcT++;
+            cout << "ERROR: Type mismatch (Atribution) Line: " << currentToken.line << endl;
+        }
+    }
+    PcT.clear();
+}
+
 int erro()
 {
     static int counter = 0;
@@ -63,7 +158,7 @@ void initializeTable(){
 }
 
 //checa se existe um ident. com esse nome
-void callSymbol(){
+int callSymbol(){
     int aux = 0;
     for(int i = symbolTable.size() - 1; i > 0; --i){
         if(symbolTable[i].identifier == currentToken.symbol){
@@ -73,7 +168,9 @@ void callSymbol(){
     }
     if(!aux){
       cout << "Undeclared identifier on line " << currentToken.line <<  " (" << currentToken.symbol << ")" << endl;
+      return 0;
     }
+    return 1;
 }
 
 //checa até o primeiro MARK se já tem alguma var com o memso nome
@@ -129,7 +226,7 @@ void setTypeOfidentifiers(){
     }
 }
 
-string getIdentifierType(){
+string getIdentifierType(Token currentToken){
     for(int i = symbolTable.size() - 1; i >= 0; --i){
         if(symbolTable[i].identifier == currentToken.symbol){
             return symbolTable[i].type;
@@ -197,12 +294,14 @@ int fator(){
         currentToken.TokenType == "Real" ||
         currentToken.TokenType == "Real 1" ||
         currentToken.TokenType == "Boolean"){
+        PcT.push_back(currentToken.TokenType);
         return 1;
     }
     else if (currentToken.TokenType == "Identificador"){
-        callSymbol();
+        if(callSymbol()){
+            PcT.push_back(getIdentifierType(currentToken));
+        }
         getSymbol();
-
         if (currentToken.symbol == "("){
             if(listaDeExpressoes()){
                 getSymbol();
@@ -252,6 +351,7 @@ int fator(){
 int termo_(){
     if(opMultiplicativo()){
         if(fator()){
+            updatePcTArithmetic();
             if(termo_()){
                 return 1;
             }
@@ -275,6 +375,7 @@ int termo(){
 int expressaoSimples_(){
     if(opAditivo()){
         if(termo()){
+            updatePcTArithmetic();
             if(expressaoSimples_()){
                 return 1;
             }
@@ -306,6 +407,7 @@ int expressaoSimples(){
 int expressao(){
     if(expressaoSimples()){
         if(opRelacional() && expressaoSimples()){
+            updatePcTRelational();
             return 1;
         }
         else{
@@ -361,7 +463,9 @@ int ativacaoDeProcedimento(){
 int variavel(){
     getSymbol();
     if(currentToken.TokenType == "Identificador"){
-        callSymbol();
+        if(callSymbol()){
+            PcT.push_back(getIdentifierType(currentToken));
+        }
         return 1;
     }
     else{
@@ -383,9 +487,17 @@ int parteElse(){
 
 int comando(){
     if(variavel()){
+        Token lastToken = currentToken;
         getSymbol();
         if(currentToken.TokenType == "Atribuição"){
-            return expressao();
+            PcT.push_back(getIdentifierType(lastToken));
+            if(expressao()){
+                updatePcTAtribution();
+                return 1;
+            }
+            else{
+                return 0;
+            }
         }
         else if (ativacaoDeProcedimento()){
             return 1;
