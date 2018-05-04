@@ -7,6 +7,7 @@ struct IdentifierAndType{
 };
 
 int errorPcT = 0;
+string arithmeticOP;
 
 vector<string> PcT;
 vector<IdentifierAndType> symbolTable;
@@ -49,24 +50,37 @@ void updatePcTArithmetic(){
     int top = PcT.size() - 1;
     int subtop = top - 1;
 
-    if(PcT[top] == "Inteiro" && PcT[subtop] == "Inteiro"){
-        PcT.pop_back();
-    }
-    else if(PcT[top] == "Inteiro" && PcT[subtop] == "Real"){
-        PcT.pop_back();
-    }
-    else if(PcT[top] == "Real" && PcT[subtop] == "Inteiro"){
-        PcT.pop_back();
-        PcT.pop_back();
-        PcT.push_back("Real");
-    }
-    else if(PcT[top] == "Real" && PcT[subtop] == "Real"){
-        PcT.pop_back();
+    if(arithmeticOP == "and" || arithmeticOP == "or"){
+        if(PcT[top] == "Boolean" && PcT[subtop] == "Boolean"){
+            PcT.pop_back();
+        }
+        else{
+            if(!errorPcT){
+                errorPcT++;
+                cout << "ERROR: Type mismatch (Arithmetic) Line: " << tokenList[currentIndex - 1].line << endl;
+            }
+        }
     }
     else{
-        if(!errorPcT){
-            errorPcT++;
-            cout << "ERROR: Type mismatch (Arithmetic) Line: " << tokenList[currentIndex - 1].line << endl;
+        if(PcT[top] == "Inteiro" && PcT[subtop] == "Inteiro"){
+            PcT.pop_back();
+        }
+        else if(PcT[top] == "Inteiro" && PcT[subtop] == "Real"){
+            PcT.pop_back();
+        }
+        else if(PcT[top] == "Real" && PcT[subtop] == "Inteiro"){
+            PcT.pop_back();
+            PcT.pop_back();
+            PcT.push_back("Real");
+        }
+        else if(PcT[top] == "Real" && PcT[subtop] == "Real"){
+            PcT.pop_back();
+        }
+        else{
+            if(!errorPcT){
+                errorPcT++;
+                cout << "ERROR: Type mismatch (Arithmetic) Line: " << tokenList[currentIndex - 1].line << endl;
+            }
         }
     }
 }
@@ -104,7 +118,6 @@ void updatePcTRelational(){
 }
 
 void updatePcTAtribution(){
-
     int top = PcT.size() - 1;
     int subtop = top - 1;
 
@@ -246,6 +259,7 @@ void getSymbol(){
 int opMultiplicativo(){
     getSymbol();
     if(currentToken.TokenType == "Op. Multiplicativo"){
+        arithmeticOP = currentToken.symbol;
         return 1;
     }
     else{
@@ -257,6 +271,7 @@ int opMultiplicativo(){
 int opAditivo(){
     getSymbol();
     if(currentToken.TokenType == "Op. Aditivo"){
+        arithmeticOP = currentToken.symbol;
         return 1;
     }
     else{
