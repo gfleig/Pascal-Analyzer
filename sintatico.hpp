@@ -74,7 +74,7 @@ void updatePcTArithmetic(){
         else{
             if(!errorPcT){
                 errorPcT++;
-                cout << "ERROR: Type mismatch (Arithmetic) Line: " << tokenList[currentIndex - 1].line << endl;
+                cout << "ERROR: Type mismatch (Logic) Line: " << tokenList[currentIndex - 1].line << endl;
             }
         }
     }
