@@ -1,9 +1,6 @@
 Token currentToken;
 unsigned int currentIndex = 0;
 
-int errorLine;
-string errorMessage;
-
 vector<string> symbolTable;
 
 int programa();
