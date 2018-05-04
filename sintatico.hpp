@@ -66,7 +66,7 @@ void updatePcTArithmetic(){
     else{
         if(!errorPcT){
             errorPcT++;
-            cout << "ERROR: Type mismatch (Arithmetic) Line: " << currentToken.line << endl;
+            cout << "ERROR: Type mismatch (Arithmetic) Line: " << tokenList[currentIndex - 1].line << endl;
         }
     }
 }
@@ -98,7 +98,7 @@ void updatePcTRelational(){
     else{
         if(!errorPcT){
             errorPcT++;
-            cout << "ERROR: Type mismatch (Relational) Line: " << currentToken.line << endl;
+            cout << "ERROR: Type mismatch (Relational) Line: " << tokenList[currentIndex - 1].line << endl;
         }
     }
 }
@@ -131,7 +131,7 @@ void updatePcTAtribution(){
     else{
         if(!errorPcT){
             errorPcT++;
-            cout << "ERROR: Type mismatch (Atribution) Line: " << currentToken.line << endl;
+            cout << "ERROR: Type mismatch (Atribution) Line: " << tokenList[currentIndex - 1].line << endl;
         }
     }
     PcT.clear();
@@ -866,7 +866,9 @@ int programa(){
                             getSymbol();
 
                             if(currentToken.symbol == "."){
-                                cout << "Programa Sintaticamente Correto! " << endl;
+                                if(!errorPcT){
+                                    cout << "Programa Correto! " << endl;
+                                }
                                 return 1;
                             }
                             else{
